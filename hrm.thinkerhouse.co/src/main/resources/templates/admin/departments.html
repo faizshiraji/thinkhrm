@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-sm-flex justify-content-between align-items-start">
+                        <div>
+                          <!-- <h4 class="card-title card-title-dash">Recent Employee</h4> -->
+                          <h4 class="card-title card-title-dash">Departments</h4>
+                        </div>
+                        <div>
+                          <a type="button" th:href="@{/new_department}" class="btn btn-primary btn-rounded btn-icon">
+                            <i class="mdi mdi-account-plus"></i> Add New
+                        </a>
+                        </div>
+                      </div>
+                    <div class="table-responsive">
+                        
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Sl#</th>
+                            <th>Name</th>
+                            <th>Created On</th>
+                            <th>Modified On</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        	<tr th:if="${#lists.isEmpty(departments)}">
+                        		<td colspan="6">Your don't have any department yet.</td>
+                        	</tr>
+                        	<tr th:if="${msgString != null}">
+                        		<td colspan="6"><span th:text="${msgString}"></span></td>
+                        	</tr>
+                          <tr th:each="department : ${departments}">
+                            <td th:text="${departmentStat.count}">Jacob</td>
+                            <td th:text="${department.departmentName}">53275531</td>
+                            <td th:text="${department.createDate}">12 May 2017</td>
+                            <td th:text="${department.updateDate}">12 May 2017</td>
+                            <td th:text="${department.status == 1 ? 'Enable' : (department.status == 0 ? 'Disable' : 'Unknown')}"></td>
+                            <td>
+                            	<a type="button" class="btn btn-primary btn-md" th:href="@{/edit_department/{id}(id=${department.idDepartment})}">Edit</a>
+                            	<a type="button" class="btn btn-danger btn-md" th:href="@{/del_department/{id}(id=${department.idDepartment})}" 
+                            	   onclick="return confirm('Are you sure you want to delete this department?');">
+                            	   Delete
+                            	</a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

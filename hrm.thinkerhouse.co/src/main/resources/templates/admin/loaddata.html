@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-sm-flex justify-content-between align-items-start">
+                        <div>
+                          <!-- <h4 class="card-title card-title-dash">Recent Employee</h4> -->
+                          <h4 class="card-title card-title-dash">Device Data</h4>
+                        </div>
+                        <div>
+                          <a type="button" class="btn btn-primary btn-rounded btn-icon" th:href="@{/devicelogform}">
+                            <i class="fa fa-download"></i> Load
+                        </a>
+                        </div>
+                      </div>
+                    <div class="table-responsive">
+                        
+                      <table class="table">
+                        <thead>
+							<tr>
+							  <th>Sl#</th>
+							  <th>Device Name</th>
+							  <th>Device IP</th>
+							  <th>User ID</th>
+							  <th>User SN</th>
+							  <th>Record Time</th>
+							  <th>Verify Type</th>
+							  <th>Verify State</th>
+							  <th>Downloaded At</th>
+							  <th>Update Date</th>
+							  <th>Status</th>
+							</tr>
+                        </thead>
+                        <tbody>
+                        	<tr th:if="${#lists.isEmpty(devicePunchLogs)}">
+                        		<td colspan="9"></td>
+                        	</tr>
+                        	<tr th:if="${msgString != null}">
+                        		<td colspan="9"><span th:text="${msgString}"></span></td>
+                        	</tr>
+							<tr th:each="deviceLog : ${deviceLogs}">
+							  <td th:text="${deviceLogStat.count}">1</td>
+							  <td th:text="${deviceLog.devices.deviceName}">53275531</td>
+							  <td th:text="${deviceLog.devices.ipAddress}">12 May 2017</td>
+							  <td th:text="${deviceLog.userID}"></td>
+							  <td th:text="${deviceLog.userSN}"></td>
+							  <td th:text="${deviceLog.recordTime}"></td>
+							  <td th:text="${deviceLog.verifyType}"></td>
+							  <td th:text="${deviceLog.verifyState}"></td>
+							  <td th:text="${deviceLog.createDate}"></td>
+							  <td th:text="${deviceLog.updateDate}"></td>
+							  <td th:text="${deviceLog.logStatus}"></td>
+							</tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

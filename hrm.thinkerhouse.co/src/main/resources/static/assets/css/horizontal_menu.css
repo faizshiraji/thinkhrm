@@ -1,0 +1,13 @@
+.navbar-menu-wrapper {
+    padding: 0.5rem 1rem;
+}
+.dropdown-menu-right {
+    right: 0;
+    left: auto;
+}
+.dropdown-toggle-split {
+    padding: 0.375rem 0.75rem;
+}
+.dropdown-item {
+    cursor: pointer;
+}

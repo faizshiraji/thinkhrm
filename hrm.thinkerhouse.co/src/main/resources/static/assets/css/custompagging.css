@@ -1,0 +1,47 @@
+.pagination {
+                justify-content: center;
+                margin-top: 20px;
+            }
+            .pagination .page-item .page-link {
+                color: #007bff;
+                border-radius: 50%;
+            }
+            .pagination .page-item.active .page-link {
+                background-color: #007bff;
+                color: white;
+                border-color: #007bff;
+            }
+            .pagination .page-item .page-link:hover {
+                background-color: #f8f9fa;
+            }
+		 .calendar-controls {
+		        display: flex;
+		        justify-content: center;
+		        align-items: center;
+		        margin-bottom: 10px;
+		    }
+		    .calendar {
+		        table-layout: fixed;
+		        width: 100%;
+		    }
+		    .calendar th, .calendar td {
+		        width: 14.285%;
+		        text-align: center;
+		        height: 100px;
+		        vertical-align: top;
+		        border: 1px solid #ddd;
+		    }
+		    .calendar th {
+		        background-color: #f8f9fa;
+		    }
+		    .calendar td button {
+		        width: 100%;
+		        height: 100%;
+		        background: none;
+		        border: none;
+		        padding: 10px;
+		        cursor: pointer;
+		    }
+		    .calendar td button:hover {
+		        background-color: #f0f0f0;
+		    }

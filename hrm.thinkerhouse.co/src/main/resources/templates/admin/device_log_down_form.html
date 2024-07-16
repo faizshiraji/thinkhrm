@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+		               <div class="col-12 grid-margin stretch-card">
+		                <div class="card">
+		                  <div class="card-body" th:if="${deviceLogDownLoadRoute == 2}">
+		                    <h4 class="card-title">Device User Data Download</h4>
+		                    <p class="card-description"> Select your device and download device user info </p>
+		                    <form class="forms-sample" action="/download_device_userinfo" method="post">
+							    <div class="form-group">
+							        <label for="exampleSelectGender">My Devices</label>
+							        <select class="form-select" name="deviceId">
+							            <option value="">Select</option>
+							            <option th:each="device : ${devices}" th:value="${device.idDevice}" th:text="${device.deviceName} + ' ' + ${device.ipAddress}">Enable</option>
+							        </select>
+							    </div>
+							    
+							    <button type="submit" class="btn btn-primary me-2">
+							        <i class="fa fa-download"></i> Download
+							    </button>
+							    <button type="button" class="btn btn-light">Cancel</button>
+							</form>
+		                  </div>
+		                  <div class="card-body" th:if="${deviceLogDownLoadRoute == 1}">
+		                    <h4 class="card-title">Device Log Download</h4>
+		                    <p class="card-description"> Select your device and download your log </p>
+		                    <form class="forms-sample" action="/download_logs" method="post">
+							    <div class="form-group">
+							        <label for="exampleSelectGender">My Devices</label>
+							        <select class="form-select" name="deviceId">
+							            <option value="">Select</option>
+							            <option th:each="device : ${devices}" th:value="${device.idDevice}" th:text="${device.deviceName} + ' ' + ${device.ipAddress}">Enable</option>
+							        </select>
+							    </div>
+							    
+							    <button type="submit" class="btn btn-primary me-2">
+							        <i class="fa fa-download"></i> Download
+							    </button>
+							    <button type="button" class="btn btn-light">Cancel</button>
+							</form>
+		                  </div>
+		                </div>
+		              </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

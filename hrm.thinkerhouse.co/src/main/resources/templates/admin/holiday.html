@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-sm-flex justify-content-between align-items-start">
+                      <div>
+                          <h4 class="card-title card-title-dash">Holiday Calendar</h4>
+                      </div>
+                  </div>
+                    
+                  <div class="container mt-4">
+                    <div class="calendar-controls">
+                        <button id="prevMonth" class="btn btn-primary">&lt;</button>
+                        <select id="monthSelect" class="form-control mx-2" style="width: 150px;">
+                            <option value="0">January</option>
+                            <option value="1">February</option>
+                            <option value="2">March</option>
+                            <option value="3">April</option>
+                            <option value="4">May</option>
+                            <option value="5">June</option>
+                            <option value="6">July</option>
+                            <option value="7">August</option>
+                            <option value="8">September</option>
+                            <option value="9">October</option>
+                            <option value="10">November</option>
+                            <option value="11">December</option>
+                        </select>
+                        <select id="yearSelect" class="form-control mx-2" style="width: 100px;">
+                            <!-- Years will be populated by JavaScript -->
+                        </select>
+                        <button id="nextMonth" class="btn btn-primary">&gt;</button>
+                    </div>
+                    <table class="table calendar">
+                        <thead>
+                            <tr>
+                                <th>Sun</th>
+                                <th>Mon</th>
+                                <th>Tue</th>
+                                <th>Wed</th>
+                                <th>Thu</th>
+                                <th>Fri</th>
+                                <th>Sat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="calendarBody">
+                            <!-- Calendar days will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

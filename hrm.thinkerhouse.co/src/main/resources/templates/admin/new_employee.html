@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+		               <div class="col-12 grid-margin stretch-card">
+		                <div class="card">
+		                  <div th:if="${code != null}" class="card-body">
+                          <h4 class="card-title">Edit <span th:text="${employee.firstName}"></span></h4>
+                          <p class="card-description"> Please fill up the following for adding your employee here. </p>
+                          <form class="form-sample" th:action="@{/update_employee/{id}(id=${employee.idEmployee})}" enctype="multipart/form-data" method="post" th:object="${employee}">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group row">
+                                  <label class="col-sm-3 col-form-label">First Name</label>
+                                  <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="firstName" th:value="${employee.firstName}"/>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-group row">
+                                  <label class="col-sm-3 col-form-label">Last Name</label>
+                                  <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="lastName" th:value="${employee.lastName}"/>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-4">
+                                <div class="form-group row">
+                                  <label class="col-sm-3 col-form-label">Email</label>
+                                  <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="email" th:value="${employee.email}"/>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group row">
+                                  <label class="col-sm-3 col-form-label">Phone</label>
+                                  <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="phone" th:value="${employee.phone}"/>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group row">
+                                  <label class="col-sm-3 col-form-label">Position</label>
+                                  <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="position" th:value="${employee.position}"/>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-4">
+                                <div class="form-group row">
+                                  <label class="col-sm-5 col-form-label">Department</label>
+                                  <div th:block th:if="${employee.department != null}" class="col-sm-7">
+                                    <select class="form-select" name="department">
+                                      <option th:value="${employee.department.idDepartment}" th:text="${employee.department.departmentName}">Select</option>
+                                      <option th:each="department : ${departments}" th:value="${department.idDepartment}" th:text="${department.departmentName}">Category2</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group row">
+                                  <label class="col-sm-3 col-form-label">Team</label>
+                                  <div th:block th:if="${employee.team != null}" class="col-sm-9">
+                                    <select class="form-select" name="team">
+                                      <option th:value="${employee.team.idTeam}" th:text="${employee.team.teamName}">Select</option>
+                                      <option th:each="team : ${teams}" th:value="${team.idTeam}" th:text="${team.teamName}">Category2</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group row">
+                                  <label class="col-sm-3 col-form-label">Branch</label>
+                                  <div th:block th:if="${employee.department != null}" class="col-sm-9">
+                                    <select class="form-select" name="branch" th:field="*{branch}">
+                                      <option th:value="${employee.branch.idBranch}" th:text="${employee.branch.branchName}">Select</option>
+                                      <option th:each="branch : ${branchs}" th:value="${branch.idBranch}" th:text="${branch.branchName}">Category2</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="form-group row">
+                                <div class="col-md-5">
+                                  <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Picture Upload</label>
+                                    <div class="col-sm-7">
+                                      <img width="100px" class="img-responsive" th:src="@{'/img/uploads/' + ${employee.image}}" />
+                                      <input type="file" name="image" class="form-control"/>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-7">
+                                  <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Joining Date</label>
+                                    <div class="col-sm-7">
+                                      <input type="date" class="form-control" placeholder="Joining Date" name="date" th:value="${employee.date}">
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="exampleSelectGender">Status</label>
+                                  <select class="form-select" name="status">
+                                    <option th:selected="${employee.status == ''}">Select</option>
+                                    <option th:value="1" th:selected="${employee.status == 1}">Enable</option>
+                                    <option th:value="0" th:selected="${employee.status == 0}">Disable</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary me-2">Submit</button>
+                            <button type="button" class="btn btn-default">Cancel</button>
+                          </form>
+                        </div>
+                        <div th:unless="${code != null}" class="card-body">
+                        <h4 class="card-title">New Employee</h4>
+                        <p class="card-description"> Please fill up the following to add a new employee. </p>
+                        <form class="form-sample" th:action="@{/add_employee}" enctype="multipart/form-data" method="post" th:object="${employee}">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">First Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="firstName"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Last Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="lastName"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Email</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="email"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Phone</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="phone"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Position</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="position"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-5 col-form-label">Department</label>
+                                        <div class="col-sm-7">
+                                            <select class="form-select" name="department">
+                                                <option value=0>Select</option>
+                                                <option th:each="department : ${departments}" th:value="${department.idDepartment}" th:text="${department.departmentName}">Category2</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Team</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-select" name="team">
+                                                <option value=0>Select</option>
+                                                <option th:each="team : ${teams}" th:value="${team.idTeam}" th:text="${team.teamName}">Category2</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Branch</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-select" name="branch" th:field="*{branch}">
+                                                <option value=0>Select</option>
+                                                <option th:each="branch : ${branchs}" th:value="${branch.idBranch}" th:text="${branch.branchName}">Category2</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group row">
+                                    <div class="col-md-5">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Picture Upload</label>
+                                            <div class="col-sm-7">
+                                                <input type="file" name="image" class="form-control"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Joining Date</label>
+                                            <div class="col-sm-7">
+                                                <input type="date" class="form-control" placeholder="Joining Date" name="date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="exampleSelectGender">Status</label>
+                                        <select class="form-select" name="status">
+                                            <option>Select</option>
+                                            <option th:value="1">Enable</option>
+                                            <option th:value="0">Disable</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary me-2">Submit</button>
+                            <button type="button" class="btn btn-default">Cancel</button>
+                        </form>
+                    </div>
+		                </div>
+		              </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{admin/fragments/fragment :: header}"></head>
+<body>
+<div class="container-scroller">
+  <!-- partial:../../partials/_navbar.html -->
+  <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:../../partials/_sidebar.html -->
+    <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="col-lg-16 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="col-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title"><span th:text="${shift.shiftName}"></span></h4>
+                      <p class="card-description"> Please check which employees need to be added to this shift.. </p>
+                      <form th:action="@{/updateShift}" method="post">
+                        <input type="hidden" name="idShift" th:value="${shift.idShift}" />
+                        <div class="table-responsive">
+                          <table class="table table-striped">
+                            <thead>
+                              <tr>
+                                <th> Sl# </th>
+                                <th> Name </th>
+                                <th> Picture </th>
+                                <th> Email </th>
+                                <th> UserID </th>
+                                <th> Joining Date</th>
+                                <th> Select </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr th:if="${#lists.isEmpty(allByShiftIsNulls)}">
+                                <td colspan="8">Your don't have any branch yet.</td>
+                              </tr>
+                              <tr th:if="${msgString != null}">
+                                <td colspan="8"><span th:text="${msgString}"></span></td>
+                              </tr>
+                              <tr th:each="allByShiftIsNull, stat : ${allByShiftIsNulls}">
+                                <td class="py-1" th:text="${stat.count}"></td>
+                                <td th:text="${allByShiftIsNull.firstName}">  </td>
+                                <td> <img th:src="@{'img/uploads/' + ${allByShiftIsNull.image}}"/> </td>
+                                <td th:text="${allByShiftIsNull.email}">  </td>
+                                <td th:text="${allByShiftIsNull.userId}">  </td>
+                                <td th:text="${allByShiftIsNull.date}">  </td>
+                                <td> <input type="checkbox" class="form-check-input" name="selectedEmployees" th:value="${allByShiftIsNull.idEmployee}"></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <button type="submit" class="btn btn-primary me-2">Submit</button>
+                        <button class="btn btn-light" type="reset">Cancel</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:../../partials/_footer.html -->
+      <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>
+<div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+</body>
+</html>

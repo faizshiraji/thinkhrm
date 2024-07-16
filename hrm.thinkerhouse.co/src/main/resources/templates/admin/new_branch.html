@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+		               <div class="col-12 grid-margin stretch-card">
+		                <div class="card">
+		                  <div th:if="${branch != null}" class="card-body">
+		                    <h4 class="card-title">New Branch</h4>
+		                    <p class="card-description"> Please fillup the following for update your branch here. </p>
+		                    <form class="forms-sample" th:action="@{/update_branch/{id}(id=${branch.idBranch})}" method="post" th:object="${branch}">
+		                      <div class="form-group">
+		                        <label for="deviceName">Branch Name</label>
+		                        <input type="text" class="form-control" name="branchName" th:value="${branch.branchName}" placeholder="Branch Name" required>
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="machineId">Branch Address</label>
+		                        <input type="text" class="form-control" name="branchAddress" th:value="${branch.branchAddress}" placeholder="Branch Address">
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="ipAddress">Location</label>
+		                        <input type="text" class="form-control" name="location" th:value="${branch.location}" placeholder="Location">
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="exampleSelectGender">Status</label>
+		                        <select class="form-select" name="status">
+					                <option th:selected="${branch.status == ''}">Select</option>
+					                <option th:value="1" th:selected="${branch.status == 1}">Enable</option>
+					                <option th:value="0" th:selected="${branch.status == 0}">Disable</option>
+					            </select>
+		                      </div>
+		                      <button type="submit" class="btn btn-primary me-2">Submit</button>
+		                      <button class="btn btn-light">Cancel</button>
+		                    </form>
+		                  </div>
+		                  <div th:unless="${branch != null}" class="card-body">
+		                    <h4 class="card-title">New Branch</h4>
+		                    <p class="card-description"> Please fillup the following for adding your branch here. </p>
+		                    <form class="forms-sample" th:action="@{/add_branch}" method="post" th:object="${branch}">
+		                      <div class="form-group">
+		                        <label for="deviceName">Branch Name</label>
+		                        <input type="text" class="form-control" name="branchName" placeholder="Branch Name" required>
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="machineId">Branch Address</label>
+		                        <input type="text" class="form-control" name="branchAddress" placeholder="Branch Address">
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="ipAddress">Location</label>
+		                        <input type="text" class="form-control" name="location" placeholder="Location">
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="exampleSelectGender">Status</label>
+		                        <select class="form-select" name="status">
+		                          <option value=1>Enable</option>
+		                          <option value=0>Disable</option>
+		                        </select>
+		                      </div>
+		                      <button type="submit" class="btn btn-primary me-2">Submit</button>
+		                      <button class="btn btn-light">Cancel</button>
+		                    </form>
+		                  </div>
+		                </div>
+		              </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-sm-flex justify-content-between align-items-start">
+                        <div>
+                          <!-- <h4 class="card-title card-title-dash">Recent Employee</h4> -->
+                          <h4 class="card-title card-title-dash">Attendance Devices</h4>
+                        </div>
+                        <div>
+                          <a type="button" class="btn btn-primary btn-rounded btn-icon" th:href="@{/new_device}">
+                            <i class="mdi mdi-account-plus"></i> Add New
+                        </a>
+                        </div>
+                      </div>
+                    <div class="table-responsive">
+                        
+                      <table class="table">
+                        <thead>
+                          <tr>
+                          	<th>Sl#</th>
+                            <th>Device Name</th>
+                            <th>IP Address</th>
+                            <th>Machine ID</th>
+                            <th>Port</th>
+                            <th>Status</th>
+                            <th>Create Date</th>
+                            <th>Update Date</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        	<tr th:if="${#lists.isEmpty(allDevices)}">
+                        		<td colspan="8">Your don't have any devices yet.</td>
+                        	</tr>
+                        	<tr th:if="${msgString != null}">
+                        		<td colspan="8"><span th:text="${msgString}"></span></td>
+                        	</tr>
+                          <tr th:each="device : ${allDevices}">
+                            <td th:text="${deviceStat.count}">1</td>
+                            <td th:text="${device.deviceName}">53275531</td>
+                            <td th:text="${device.ipAddress}">12 May 2017</td>
+                            <td th:text="${device.machineId}">12 May 2017</td>
+                            <td th:text="${device.port}">12 May 2017</td>
+                            <td th:text="${device.status}">12 May 2017</td>
+                            <td th:text="${device.createDate}">12 May 2017</td>
+                            <td th:text="${device.updateDate}">12 May 2017</td>
+                            <td>
+                            	<a type="button" class="btn btn-primary btn-md" th:href="@{/new_device/{id}(id=${device.idDevice})}">Edit</a>
+                            	<a type="button" class="btn btn-danger btn-md" th:href="@{/rm_device/{id}(id=${device.idDevice})}" data-toggle="modal" data-target="#deleteModal">Delete</a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

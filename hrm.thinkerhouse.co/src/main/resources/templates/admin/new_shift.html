@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div th:if="${shift != null}" class="card-body">
+	                <h4 class="card-title">Edit <span th:text="${shift.shiftName}"></span></h4>
+	                <p class="card-description"> Please fill up the following to add your shift here. </p>
+	                <form class="forms-sample" th:action="@{/update_shift/{id}(id=${shift.idShift})}" method="post" th:object="${shift}">
+	                  <div class="form-group">
+	                    <label for="shiftName">Shift Name</label>
+	                    <input type="text" class="form-control" name="shiftName" th:value="${shift.shiftName}" placeholder="Shift Name" required>
+	                  </div>
+	                  <div class="form-group">
+	                    <label for="shiftShortName">Short Name</label>
+	                    <input type="text" class="form-control" name="shiftShortName" th:value="${shift.shiftShortName}" placeholder="Short Name" required>
+	                  </div>
+	                  <div class="form-group">
+	                    <label for="description">Description</label>
+	                    <input type="text" class="form-control" name="description" th:value="${shift.description}" placeholder="Description" required>
+	                  </div>
+	                  <div class="form-group row">
+                        <div class="col">
+                          <label for="start-time">Start Time</label>
+                          <div id="the-basics">
+                            <select id="start-time" class="form-control" name="startTime">
+                              <option th:value="${shift.startTime}" th:text="${shift.startTime}" selected>Select Start Time</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <label for="end-time">End Time</label>
+                          <div id="bloodhound">
+                            <select id="end-time" class="form-control" name="endTime">
+                              <option th:value="${shift.endTime}" th:text="${shift.endTime}" selected>Select End Time</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <div class="col">
+                          <label for="break-time">Break Time</label>
+                          <div id="the-basics">
+                            <select id="break-time" class="form-control" name="breakTime">
+                              <option th:value="${shift.breakTime}" th:text="${shift.breakTime}" selected>Select Break Time</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+	                  <div class="form-group row">
+	                    <div class="col">
+	                      <label for="exampleSelectGender">Status</label>
+	                      <select class="form-select" name="status">
+	                        <option value="" th:selected="${shift.status == ''}">Select</option>
+	                        <option value="1" th:selected="${shift.status == 1}">Enable</option>
+	                        <option value="0" th:selected="${shift.status == 0}">Disable</option>
+	                      </select>
+	                    </div>
+	                    <div class="col">
+	                      <div class="form-check">
+	                        <label class="form-check-label">
+	                          <input type="checkbox" class="form-check-input" name="hideEndTime" th:checked="${shift.hideEndTime}"> Hide End Time </label>
+	                      </div>
+	                    </div>
+	                  </div>
+	                  <button type="submit" class="btn btn-primary me-2">Submit</button>
+	                  <button class="btn btn-light">Cancel</button>
+	                </form>
+	              </div>
+                  <div th:unless="${shift != null}" class="card-body">
+                    <h4 class="card-title">New Shift</h4>
+                    <p class="card-description"> Please fill up the following to add your shift here. </p>
+                    <form class="forms-sample" th:action="@{/add_shift}" method="post" th:object="${shift}">
+                      <div class="form-group">
+                        <label for="shiftName">Shift Name</label>
+                        <input type="text" class="form-control" name="shiftName" placeholder="Shift Name" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="shiftShortName">Short Name</label>
+                        <input type="text" class="form-control" name="shiftShortName" placeholder="Short Name" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" class="form-control" name="description" placeholder="Description" required>
+                      </div>
+                      <div class="form-group row">
+                        <div class="col">
+                          <label for="start-time">Start Time</label>
+                          <div id="the-basics">
+                            <select id="start-time" class="form-control" name="startTime">
+                              <option value="" disabled selected>Select Start Time</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <label for="end-time">End Time</label>
+                          <div id="bloodhound">
+                            <select id="end-time" class="form-control" name="endTime">
+                              <option value="" disabled selected>Select End Time</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <div class="col">
+                          <label for="break-time">Break Time</label>
+                          <div id="the-basics">
+                            <select id="break-time" class="form-control" name="breakTime">
+                              <option value="" disabled selected>Select Break Time</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <div class="col">
+                          <label for="exampleSelectGender">Status</label>
+                          <select class="form-select" name="status">
+                            <option value=1>Enable</option>
+                            <option value=0>Disable</option>
+                          </select>
+                        </div>
+                        <div class="col">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input type="checkbox" class="form-check-input" name="hideEndTime" checked> Hide End Time </label>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary me-2">Submit</button>
+                      <button class="btn btn-light">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

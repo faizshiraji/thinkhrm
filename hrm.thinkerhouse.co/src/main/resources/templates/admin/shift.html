@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-sm-flex justify-content-between align-items-start">
+                      <div>
+                        <!-- <h4 class="card-title card-title-dash">Recent Employee</h4> -->
+                        <h4 class="card-title card-title-dash">Shift</h4>
+                      </div>
+                      <div>
+                        <a type="button" th:href="@{/new_shift}" class="btn btn-primary btn-rounded btn-icon">
+                          <i class="mdi mdi-account-plus"></i> Add New
+                      </a>
+                      </div>
+                    </div>
+                    <div class="table-responsive">
+                      
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Sl#</th>
+                            <th>Name</th>
+                            <th>Timing</th>
+                            <th>Break Time</th>
+                            <th>Created On</th>
+                            <th>Updated On</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        	<tr th:if="${#lists.isEmpty(shifts)}">
+                        		<td colspan="8">Your don't have any shift yet.</td>
+                        	</tr>
+                        	<tr th:if="${msgString != null}">
+                        		<td colspan="8"><span th:text="${msgString}"></span></td>
+                        	</tr>
+                          <tr th:each="shift : ${shifts}">
+                            <td th:text="${shiftStat.count}">Jacob</td>
+                            <td th:text="${shift.shiftName}">53275531</td>
+                            <td th:text="${shift.startTime} + '-' + ${shift.endTime}">53275531</td>
+                            <td th:text="${shift.breakTime}">12 May 2017</td>
+                            <td th:text="${shift.createDate}">12 May 2017</td>
+                            <td th:text="${shift.updateDate}">12 May 2017</td>
+                            <td th:text="${shift.status == 1 ? 'Enable' : (shift.status == 0 ? 'Disable' : 'Unknown')}"></td>
+                            <td>
+                            	<a type="button" class="btn btn-primary btn-md" th:href="@{/edit_shift/{id}(id=${shift.idShift})}">Edit</a>
+                            	<a type="button" class="btn btn-danger btn-md" th:href="@{/del_shift/{id}(id=${shift.idShift})}" 
+                            	   onclick="return confirm('Are you sure you want to delete this department?');">
+                            	   Delete
+                            	</a>
+                            	<a type="button" class="btn btn-primary btn-md" th:href="@{/shift_employees/{id}(id=${shift.idShift})}">Add Employees</a>
+                            </td>
+                          </tr>
+	                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+<div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

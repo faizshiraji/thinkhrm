@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-sm-flex justify-content-between align-items-start">
+                        <div>
+                          <!-- <h4 class="card-title card-title-dash">Recent Employee</h4> -->
+                          <h4 class="card-title card-title-dash">Device User Information</h4>
+                        </div>
+                        <div>
+                          <a type="button" class="btn btn-primary btn-rounded btn-icon" th:href="@{/deviceuserdataform}">
+                            <i class="fa fa-download"></i> Load
+                        </a>
+                        </div>
+                      </div>
+                    <div class="table-responsive">
+                        
+                      <table class="table">
+                        <thead>
+							<tr>
+							  <th>Sl#</th>
+							  <th>Name</th>
+							  <th>Device</th>
+							  <th>UID</th>
+							  <th>User ID</th>
+							  <th>Role</th>
+							  <th>Password</th>
+							  <th>Card No</th>
+							  <th>Group Number</th>
+							  <th>User Time Zone Flag</th>
+							  <th>Time Zone Flag 1</th>
+							  <th>Time Zone Flag 2</th>
+							  <th>Time Zone Flag 3</th>
+							  <th>Enable</th>
+							  
+							  <th>Downloaded At</th>
+							  <th>Update Date</th>
+							  <th>Status</th>
+							</tr>
+                        </thead>
+                        <tbody>
+                        	<tr th:if="${#lists.isEmpty(deviceUserInfos)}">
+                        		<td colspan="16"> You don't have any data yet.</td>
+                        	</tr>
+                        	<tr th:if="${msgString != null}">
+                        		<td colspan="16"><span th:text="${msgString}"></span></td>
+                        	</tr>
+							<tr th:each="deviceUserInfo : ${deviceUserInfos}">
+							  <td th:text="${deviceUserInfoStat.count}">1</td>
+							  <td th:text="${deviceUserInfo.name}">53275531</td>
+							  <td th:text="${deviceUserInfo.devices.deviceName}">53275531</td>
+							  <td th:text="${deviceUserInfo.uid}">53275531</td>
+							  <td th:text="${deviceUserInfo.userid}"></td>
+							  <td th:text="${deviceUserInfo.role}"></td>
+							  <td th:text="${deviceUserInfo.password}"></td>
+							  <td th:text="${deviceUserInfo.cardno}"></td>
+							  <td th:text="${deviceUserInfo.groupNumber}"></td>
+							  <td th:text="${deviceUserInfo.userTimeZoneFlag}"></td>
+							  <td th:text="${deviceUserInfo.timeZone1}"></td>
+							  <td th:text="${deviceUserInfo.timeZone2}"></td>
+							  <td th:text="${deviceUserInfo.timeZone3}"></td>
+							  <td th:text="${deviceUserInfo.enabled}"></td>
+							  <td th:text="${deviceUserInfo.createDate}"></td>
+							  <td th:text="${deviceUserInfo.updateDate}"></td>
+							  <td th:text="${deviceUserInfo.status}"></td>
+							  
+							</tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

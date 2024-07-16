@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <nav class="navbar default-layout col-lg-12 col-12 p-0 d-flex align-items-top flex-row">
+                <div>
+                </div>
+                <div class="navbar-menu-wrapper d-flex align-items-top">
+                  <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                    </li>
+                    <li class="nav-item">
+                    </li>
+                    <li class="nav-item">
+                    </li>
+                    <li class="nav-item">
+                    </li>
+                    <li class="nav-item">
+                      <button type="button" class="btn btn-outline-success btn-fw">OT</button>
+                    </li>
+                    <li class="nav-item">
+                      <button type="button" class="btn btn-outline-success btn-fw">Leave</button>
+                    </li>
+                  </ul>
+                  <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
+                    <span class="mdi mdi-menu"></span>
+                  </button>
+                </div>
+              </nav>
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-sm-flex justify-content-between align-items-start">
+                      <div>
+                          <h4 class="card-title card-title-dash">Attendance Logs</h4>
+                      </div>
+                      <div>
+                          <div id="datepicker-from" class="input-group date datepicker navbar-date-picker">
+                              <span class="input-group-addon input-group-prepend border-right">
+                                  <span class="icon-calendar input-group-text calendar-icon"></span>
+                              </span>
+                              <input type="text" class="form-control" placeholder="From Date">
+                          </div>
+                      </div>
+                      <div>
+                          <div id="datepicker-to" class="input-group date datepicker navbar-date-picker">
+                              <span class="input-group-addon input-group-prepend border-right">
+                                  <span class="icon-calendar input-group-text calendar-icon"></span>
+                              </span>
+                              <input type="text" class="form-control" placeholder="To Date">
+                          </div>
+                      </div>
+                  </div>
+                    <div class="table-responsive pt-3">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th> # </th>
+                            <th> Emp. ID </th>
+                            <th> Name </th>
+                            <th> In-time </th>
+                            <th> In-Id </th>
+                            <th> Out-time </th>
+                            <th> Out-Id </th>
+                            <th> Status </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        	<tr th:if="${#lists.isEmpty(attendanceLogs)}">
+                        		<td colspan="8">Your don't have any branch yet.</td>
+                        	</tr>
+                        	<tr th:if="${msgString != null}">
+                        		<td colspan="8"><span th:text="${msgString}"></span></td>
+                        	</tr>
+							<tr th:each="attendanceLog : ${attendanceLogs}">
+								<td th:text="${attendanceLogStat.count}"></td>
+								<td th:text="${attendanceLog.employee.userId}"></td>
+								<td th:text="${attendanceLog.employee.firstName}"></td>
+								<td th:text="${attendanceLog.inTime}"></td>
+								<td th:text="${attendanceLog.inId}"></td>
+								<td th:text="${attendanceLog.outTime}"></td>
+								<td th:text="${attendanceLog.outId}"></td>
+								<td th:text="${attendanceLog.status}"></td>
+							</tr>
+                      </tbody>
+                      </table>
+                      
+                    </div>
+                    <nav class="navbar d-flex flex-row justify-content-between">
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <a type="button" href="#" class="btn btn-primary" id="prevPage"><i class="fa  fa-angle-double-left"></i></a>
+                        <a type="button" href="#" class="btn btn-outline-secondary" id="pageNumber">1</a>
+                        <a type="button" class="btn btn-primary">...</a>
+                        <a type="button" class="btn btn-outline-secondary" id="pageNumber">3</a>
+                        <a type="button" class="btn btn-primary" id="nextPage"><i class="fa  fa-angle-double-right"></i></a>
+                      </div>
+                  </nav>
+                  </div>
+                  <div class="table-responsive pt-3">
+                      <table class="table table-bordered">
+        <tr>
+            <th>Date</th>
+            <th>First Punch</th>
+            <th>Last Punch</th>
+        </tr>
+        <tr th:each="entry : ${firstLastPunchByDate}">
+            <td th:text="${entry.key}"></td>
+            <td th:text="${entry.value[0]}"></td>
+            <td th:text="${entry.value[1] != null ? entry.value[1] : ''}"></td>
+        </tr>
+    </table>
+                  
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

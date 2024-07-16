@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-sm-flex justify-content-between align-items-start">
+                        <div>
+                          <!-- <h4 class="card-title card-title-dash">Recent Employee</h4> -->
+                          <h4 class="card-title card-title-dash">Departments</h4>
+                        </div>
+                        <div>
+                          <button type="button" class="btn btn-primary btn-rounded btn-icon">
+                            <i class="mdi mdi-account-plus"></i> Add New
+                        </button>
+                        </div>
+                      </div>
+                    <div class="table-responsive">
+                        
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Profile</th>
+                            <th>VatNo.</th>
+                            <th>Created</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Jacob</td>
+                            <td>53275531</td>
+                            <td>12 May 2017</td>
+                            <td><label class="badge badge-danger">Pending</label></td>
+                          </tr>
+                          <tr>
+                            <td>Messsy</td>
+                            <td>53275532</td>
+                            <td>15 May 2017</td>
+                            <td><label class="badge badge-warning">In progress</label></td>
+                          </tr>
+                          <tr>
+                            <td>John</td>
+                            <td>53275533</td>
+                            <td>14 May 2017</td>
+                            <td><label class="badge badge-info">Fixed</label></td>
+                          </tr>
+                          <tr>
+                            <td>Peter</td>
+                            <td>53275534</td>
+                            <td>16 May 2017</td>
+                            <td><label class="badge badge-success">Completed</label></td>
+                          </tr>
+                          <tr>
+                            <td>Dave</td>
+                            <td>53275535</td>
+                            <td>20 May 2017</td>
+                            <td><label class="badge badge-warning">In progress</label></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

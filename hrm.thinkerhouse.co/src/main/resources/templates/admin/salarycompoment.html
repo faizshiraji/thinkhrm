@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-sm-flex justify-content-between align-items-start">
+                      <nav class="navbar col-lg-12 col-12 p-0 d-flex align-items-top flex-row">
+                          <div class="navbar-menu-wrapper d-flex align-items-center w-100">
+                              <!-- Left-aligned Heading -->
+                              <h4 class="mb-0">Salary Component</h4>
+                              
+                              <!-- Spacer to push buttons to the right -->
+                              <div class="flex-grow-1"></div>
+                              
+                              <div>
+                        <a type="button" th:href="@{/new_salary_component}" class="btn btn-primary btn-rounded btn-icon">
+                          <i class="mdi mdi-account-plus"></i> Add New
+                      </a>
+                      </div>
+                              
+                              <!-- Navbar Toggler for Small Screens -->
+                              <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
+                                  <span class="mdi mdi-menu"></span>
+                              </button>
+                          </div>
+                      </nav>
+                  </div>
+                    <div class="table-bordered">
+                      
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Sl#</th>
+                            <th>Name</th>
+                            <th>User ID</th>
+                            <th>Component Name</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Created On</th>
+                            <th>Updated On</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        	<tr th:if="${#lists.isEmpty(salaryComponents)}">
+                        		<td colspan="11">Your don't have any Salary Structur yet.</td>
+                        	</tr>
+                        	<tr th:if="${msgString != null}">
+                        		<td colspan="11"><span th:text="${msgString}"></span></td>
+                        	</tr>
+                          <tr th:each="salaryComponent : ${salaryComponents}">
+                            <td th:text="${salaryComponentStat.count}">1</td>
+                            <td th:text="${salaryComponent.employee.firstName}">Ruhul Sheikh</td>
+                            <td th:text="${salaryComponent.employee.userId}">Sr. Operatore</td>
+                            <td th:text="${salaryComponent.compomentName}">20,000.00</td>
+                            <td th:text="${salaryComponent.amount}">2,372.00</td>
+                            <td th:if="${salaryComponent.status == 0}">
+                            	<label class="badge badge-danger">Pending</label>
+                            </td>
+                            <td th:if="${salaryComponent.status == 1}">
+                            	<label class="badge badge-warning">Processed</label>
+                            </td>
+                            <td th:if="${salaryComponent.status == 3}">
+                            	<label class="badge badge-success">Ready</label>
+                            </td>
+                            <td th:text="${salaryComponent.createDate}">16,872.00</td>
+                            <td th:text="${salaryComponent.updateDate}">16,872.00</td>
+                            <td th:if="${salaryComponent.status != 3}">
+                            	<a type="button" class="btn btn-primary btn-md" th:href="@{/edit_salaryComponent/{id}(id=${salaryComponent.idSalaryComponent})}">Edit</a>
+                                <a type="button" class="btn btn-danger btn-md" th:href="@{/del_salaryComponent/{id}(id=${salaryComponent.idSalaryComponent})}" onclick="return confirm('Are you sure you want to delete this component?');" >Delete</a>
+                            </td>
+                            <td th:unless="${salaryComponent.status != 3}">
+                            	<a type="button" class="btn btn-primary btn-md" href="#">Edit</a>
+                                <a type="button" class="btn btn-danger btn-md" href="#">Delete</a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+   <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

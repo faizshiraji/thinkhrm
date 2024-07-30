@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div th:if="${salaryComponent != null}" class="card-body">
+		               <div class="col-12 grid-margin stretch-card">
+		                <div class="card">
+		                  <div class="card-body">
+		                    <h4 class="card-title">Edit Salary Component Id: <span th:text="${salaryComponent.idSalaryComponent}"></span></h4>
+		                    <p class="card-description"> Please change the following as your required below. </p>
+		                    <form class="forms-sample" th:action="@{/updatesalarycomponent/{id} (id=${salaryComponent.idSalaryComponent})}" method="post" th:object="${salarycomponent}">
+		                      <div class="form-group">
+		                        <label>Employee</label>
+		                        <select class="form-select" name="employee" th:value="${employee}">
+		                          <option th:value="${salaryComponent.employee.idEmployee}" th:text="${salaryComponent.employee.firstName}">Select</option>
+		                          <option th:each="employee : ${employeeByStatus}" th:value="${employee.idEmployee}" th:text="${employee.firstName} + ' ' + ${employee.userId} ">Disable</option>
+		                        </select>
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="deviceName">Component Name</label>
+		                        <input type="text" class="form-control" name="compomentName" th:value="${salaryComponent.compomentName}" placeholder="Component Name" required>
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="machineId">Amount</label>
+		                        <input type="text" class="form-control" name="amount" th:value="${salaryComponent.amount}" placeholder="Amount">
+		                      </div>
+		                      <div class="form-group">
+		                        <label>Status</label>
+		                        <select class="form-select" name="status" th:value="${salaryComponent.status}">
+		                          	<option value=0>Pending</option>
+		                          	<option value=1>Processed</option>
+		                          	<option value=3>Ready</option>
+		                        </select>
+		                      </div>
+		                      <button type="submit" class="btn btn-primary me-2">Submit</button>
+		                      <button class="btn btn-light">Cancel</button>
+		                    </form>
+		                  </div>
+		                </div>
+		              </div>
+                  </div>
+                  <div th:unless="${salaryComponent != null}" class="card-body">
+		               <div class="col-12 grid-margin stretch-card">
+		                <div class="card">
+		                  <div class="card-body">
+		                    <h4 class="card-title">New Salary Component</h4>
+		                    <p class="card-description"> Please fillup the following for adding your salary component here. </p>
+		                    <form class="forms-sample" th:action="@{/add_salary_component}" method="post" th:object="${salarycomponent}">
+		                      <div class="form-group">
+		                        <label>Employee</label>
+		                        <select class="form-select" name="employee" th:value="${employee}">
+		                          <option value=0>Select</option>
+		                          <option th:each="employee : ${employeeByStatus}" th:value="${employee.idEmployee}" th:text="${employee.firstName} + ' ' + ${employee.userId} ">Disable</option>
+		                        </select>
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="deviceName">Component Name</label>
+		                        <input type="text" class="form-control" name="compomentName" th:value="${compomentName}" placeholder="Component Name" required>
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="machineId">Amount</label>
+		                        <input type="text" class="form-control" name="amount" th:value="${amount}" placeholder="Amount">
+		                      </div>
+		                      <div class="form-group">
+		                        <label>Status</label>
+		                        <select class="form-select" name="status" th:value="${status}">
+									<option value=0>Pending</option>
+		                          	<option value=1>Processed</option>
+		                          	<option value=3>Ready</option>
+		                        </select>
+		                      </div>
+		                      <button type="submit" class="btn btn-primary me-2">Submit</button>
+		                      <button class="btn btn-light">Cancel</button>
+		                    </form>
+		                  </div>
+		                </div>
+		              </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

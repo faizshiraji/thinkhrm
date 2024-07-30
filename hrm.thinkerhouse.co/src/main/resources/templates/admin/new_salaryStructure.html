@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div th:if="${salaryStructure != null}" class="card-body">
+		               <div class="col-12 grid-margin stretch-card">
+		                <div class="card">
+		                  <div class="card-body">
+		                    <h4 class="card-title">Edit Salary Structure for Employee <span th:text="${salaryStructure.employee.firstName}"></span></h4>
+		                    <p class="card-description"> Please edit the following as your required below. </p>
+		                    <form class="forms-sample" th:action="@{/update_salary_structure/{id}(id=${salaryStructure.idSalaryStructure})}" method="post" th:object="${salarystructure}">
+		                      <div class="form-group">
+		                        <label>Employee</label>
+		                        <select class="form-select" name="employee" th:value="${employee}">
+		                          <option th:value="${salaryStructure.employee.idEmployee}" th:text="${salaryStructure.employee.firstName} + ' ' + ${salaryStructure.employee.userId}">Select</option>
+		                          <option th:each="employee : ${employeeByStatus}" th:value="${employee.idEmployee}" th:text="${employee.firstName} + ' ' + ${employee.userId} ">Disable</option>
+		                        </select>
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="deviceName">Basic Salary</label>
+		                        <input type="text" class="form-control" name="basicSalary" th:value="${salaryStructure.basicSalary}" placeholder="Basic Salary" required>
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="machineId">Medical</label>
+		                        <input type="text" class="form-control" name="medical" th:value="${salaryStructure.medical}" placeholder="Medical">
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="ipAddress">House Rent</label>
+		                        <input type="text" class="form-control" name="houseRent" th:value="${salaryStructure.houseRent}" placeholder="House Rent">
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="ipAddress">Gross Salary</label>
+		                        <input type="text" class="form-control" th:value="${salaryStructure.houseRent + salaryStructure.medical + salaryStructure.basicSalary}" placeholder="House Rent" disabled>
+		                      </div>
+		                      <div class="form-group">
+		                        <label>Status</label>
+		                        <select class="form-select" name="status" th:value="${status}">
+		                          <option th:value="${salaryStructure.status}">Pending</option>
+		                          <option value=0>Pending</option>
+		                          <option value=1>Waiting</option>
+		                          <option value=2>Approved</option>
+		                        </select>
+		                      </div>
+		                      <button type="submit" class="btn btn-primary me-2">Submit</button>
+		                      <button class="btn btn-light">Cancel</button>
+		                    </form>
+		                  </div>
+		                </div>
+		              </div>
+                  </div>
+                  <div th:unless="${salaryStructure != null}" class="card-body">
+		               <div class="col-12 grid-margin stretch-card">
+		                <div class="card">
+		                  <div class="card-body">
+		                    <h4 class="card-title">New Salary Structure</h4>
+		                    <p class="card-description"> Please fillup the following for adding your salary structure here. </p>
+		                    <form class="forms-sample" th:action="@{/add_salary_structure}" method="post" th:object="${salarystructure}">
+		                      <div class="form-group">
+		                        <label>Employee</label>
+		                        <select class="form-select" name="employee" th:value="${employee}">
+		                          <option value=0>Select</option>
+		                          <option th:each="employee : ${employeeByStatus}" th:value="${employee.idEmployee}" th:text="${employee.firstName} + ' ' + ${employee.userId} ">Disable</option>
+		                        </select>
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="deviceName">Basic Salary</label>
+		                        <input type="text" class="form-control" name="basicSalary" th:value="${basicSalary}" placeholder="Basic Salary" required>
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="machineId">Medical</label>
+		                        <input type="text" class="form-control" name="medical" th:value="${medical}" placeholder="Medical">
+		                      </div>
+		                      <div class="form-group">
+		                        <label for="ipAddress">House Rent</label>
+		                        <input type="text" class="form-control" name="houseRent" th:value="${houseRent}" placeholder="House Rent">
+		                      </div>
+		                      <div class="form-group">
+		                        <label>Status</label>
+		                        <select class="form-select" name="status" th:value="${status}">
+		                          <option value=0>Pending</option>
+		                          <option value=1>Waiting</option>
+		                          <option value=2>Approved</option>
+		                        </select>
+		                      </div>
+		                      <button type="submit" class="btn btn-primary me-2">Submit</button>
+		                      <button class="btn btn-light">Cancel</button>
+		                    </form>
+		                  </div>
+		                </div>
+		              </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

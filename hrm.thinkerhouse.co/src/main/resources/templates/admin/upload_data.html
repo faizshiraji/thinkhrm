@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head th:replace="~{admin/fragments/fragment :: header}"></head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-lg-16 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+		               <div class="col-12 grid-margin stretch-card">
+		                <div class="card">
+		                  <div class="card-body">
+		                    <h4 class="card-title">New Attendance Device</h4>
+		                    <p class="card-description"> Please fillup the following for adding your device here. </p>
+		                    <form class="forms-sample" th:action="@{/uploadcsv}" enctype="multipart/form-data"  method="post">
+		                      <div class="row">
+                                <div class="form-group row">
+                                    <div class="col-md-5">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Picture Upload</label>
+                                            <div class="col-sm-7">
+                                                <input type="file" name="csvfile" accept=".csv" class="form-control"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+		                      <button type="submit" class="btn btn-primary me-2">Submit</button>
+		                      <button class="btn btn-light">Cancel</button>
+		                    </form>
+		                    <p th:text="${msgString}"></p>
+		                  </div>
+		                </div>
+		              </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+  </body>
+</html>

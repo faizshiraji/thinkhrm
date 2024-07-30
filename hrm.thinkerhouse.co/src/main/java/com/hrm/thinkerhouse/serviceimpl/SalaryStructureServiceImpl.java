@@ -5,11 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hrm.thinkerhouse.entities.Employee;
 import com.hrm.thinkerhouse.entities.SalaryStructure;
 import com.hrm.thinkerhouse.repo.SalaryStructureRepo;
 
 @Service
-public class SalaryStructureService implements com.hrm.thinkerhouse.services.SalaryStructureService {
+public class SalaryStructureServiceImpl implements com.hrm.thinkerhouse.services.SalaryStructureService {
 
 	@Autowired
 	public SalaryStructureRepo salaryStructureRepo;
@@ -42,6 +43,16 @@ public class SalaryStructureService implements com.hrm.thinkerhouse.services.Sal
 	@Override
 	public long countSalaryStructure() {
 		return salaryStructureRepo.count();
+	}
+
+	@Override
+	public List<SalaryStructure> getSalaryStructureByEmployee(Employee employee) {
+		return salaryStructureRepo.findAllByEmployee(employee);
+	}
+
+	@Override
+	public List<SalaryStructure> getSalaryStructureByStatus(Integer status) {
+		return salaryStructureRepo.findAllByStatus(status);
 	}
 
 }

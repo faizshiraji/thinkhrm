@@ -1,13 +1,20 @@
 package com.hrm.thinkerhouse.serviceimpl;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.hrm.thinkerhouse.entities.AttendanceLog;
@@ -59,6 +66,11 @@ public class AttendanceLogServiceImpl implements AttendanceLogService {
 	public long countAttendanceLogs() {
 		return attendanceLogRepo.count();
 	}
+	
+	@Override
+    public Page<AttendanceLog> getAttendanceLogsByDateRange(Date startDate, Date endDate, Pageable pageable) {
+        return attendanceLogRepo.findAllByInTimeBetween(startDate, endDate, pageable);
+    }
 	
 	public void convertLogsIfNotConverted() {
 	    List<DevicePunchLog> devicePunchLogs = devicePunchLogService.getDevicePUnchLogByStatus(0);
@@ -121,5 +133,46 @@ public class AttendanceLogServiceImpl implements AttendanceLogService {
 	    calendar.set(Calendar.MILLISECOND, 0);
 	    return calendar.getTime();
 	}
+	
+	
+//	--------------------------------------------------
+	
+  public void generateAttendanceLog() {
+      // Retrieve the employee by user ID
+		
+		List<AttendanceLog> findAll = attendanceLogRepo.findAll();
+		if (findAll != null) {
+			System.out.println(findAll.size());
+			
+			for (AttendanceLog attendanceLog : findAll) {
+				
+				if (attendanceLog != null) {
+					System.out.println(attendanceLog.getOutTime());
+				} else {
+					System.out.println( "This is Null - " + attendanceLog.getIdAttendanceLog());
+				}
+				
+			}
+			
+		}
+  }
+  
+  public String calculateAttendanceStatus(AttendanceLog attendanceLog, LocalTime shiftStartTime) {
+      if (attendanceLog.getInTime() == null) {
+          return "Absent";
+      }
+
+      LocalTime inTime = LocalTime.ofInstant(attendanceLog.getInTime().toInstant(), ZoneId.systemDefault());
+      if (inTime.isAfter(shiftStartTime)) {
+          return "Late";
+      }
+
+      return "Present";
+  }
+
+  @Override
+  public Page<AttendanceLog> getAttendanceLogs(Pageable pageable) {
+      return attendanceLogRepo.findAll(pageable);
+  }
 
 }

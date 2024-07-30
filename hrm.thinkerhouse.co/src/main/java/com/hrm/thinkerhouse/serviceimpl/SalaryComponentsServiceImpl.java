@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hrm.thinkerhouse.entities.Employee;
 import com.hrm.thinkerhouse.entities.SalaryComponents;
 import com.hrm.thinkerhouse.repo.SalaryComponentsRepo;
 import com.hrm.thinkerhouse.services.SalaryComponentsService;
@@ -44,5 +45,17 @@ public class SalaryComponentsServiceImpl implements SalaryComponentsService {
 	public long countSalaryComponents() {
 		return salaryComponentsRepo.count();
 	}
+
+	@Override
+	public List<SalaryComponents> getSalaryComponentsByEmployee(Employee employee) {
+		return salaryComponentsRepo.findAllByEmployee(employee);
+	}
+
+	@Override
+	public List<SalaryComponents> getSalaryComponentsByStatus(Integer status) {
+		return salaryComponentsRepo.findAllByStatus(status);
+	}
+
+	
 
 }

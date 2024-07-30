@@ -66,4 +66,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeRepo.findAllByShiftIsNull();
 	}
 
+	@Override
+	public List<Employee> getEmployeeByStatus(Integer status) {
+		return employeeRepo.findAllByStatus(status);
+	}
+
 }

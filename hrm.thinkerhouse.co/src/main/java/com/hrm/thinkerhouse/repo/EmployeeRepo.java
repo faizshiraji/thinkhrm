@@ -21,4 +21,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
     
     @Query("SELECT e FROM Employee e WHERE e.shift IS NULL")
     List<Employee> findAllByShiftIsNull();
+    
+    @Query("SELECT e FROM Employee e WHERE e.status = :status")
+    List<Employee> findAllByStatus(@Param("status") Integer status);
 }

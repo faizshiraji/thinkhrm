@@ -1,6 +1,7 @@
 package com.hrm.thinkerhouse.entities;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -13,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -37,7 +39,7 @@ public class Employee {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Temporal(TemporalType.DATE)
     private Date date;
-	private int status;
+	private Integer status;
 
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "id_department")
@@ -57,6 +59,9 @@ public class Employee {
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "id_shift")
 	private Shift shift;
+	
+	@OneToMany(mappedBy = "employee")
+	private List<Payroll> payrolls;
 	
 	
 	@DateTimeFormat(iso = ISO.DATE_TIME)
@@ -125,7 +130,7 @@ public class Employee {
 	}
 
 	public String getUserId() {
-		return userId != null ? userId : "null";
+		return userId;
 	}
 
 	public void setUserId(String userId) {
@@ -140,11 +145,11 @@ public class Employee {
 		this.date = date;
 	}
 
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
@@ -188,6 +193,14 @@ public class Employee {
 		this.shift = shift;
 	}
 
+	public List<Payroll> getPayrolls() {
+		return payrolls;
+	}
+
+	public void setPayrolls(List<Payroll> payrolls) {
+		this.payrolls = payrolls;
+	}
+
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -209,8 +222,10 @@ public class Employee {
 		return "Employee [idEmployee=" + idEmployee + ", firstName=" + firstName + ", lastName=" + lastName + ", email="
 				+ email + ", phone=" + phone + ", image=" + image + ", position=" + position + ", userId=" + userId
 				+ ", date=" + date + ", status=" + status + ", department=" + department + ", branch=" + branch
-				+ ", team=" + team + ", users=" + users + ", shift=" + shift + ", createDate=" + createDate
-				+ ", updateDate=" + updateDate + "]";
+				+ ", team=" + team + ", users=" + users + ", shift=" + shift + ", payrolls=" + payrolls
+				+ ", createDate=" + createDate + ", updateDate=" + updateDate + "]";
 	}
+
+	
 
 }

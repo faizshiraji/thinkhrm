@@ -37,6 +37,8 @@ public class SalaryStructure {
 	@JoinColumn(name = "id_employee")
 	private Employee employee;
 
+	private Integer status;
+	
 	public SalaryStructure() {
 
 	}
@@ -97,24 +99,22 @@ public class SalaryStructure {
 		this.employee = employee;
 	}
 
-	public SalaryStructure(int idSalaryStructure, Double basicSalary, Double medical, Double houseRent, Date createDate,
-			Date updateDate, Employee employee) {
-		super();
-		this.idSalaryStructure = idSalaryStructure;
-		this.basicSalary = basicSalary;
-		this.medical = medical;
-		this.houseRent = houseRent;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.employee = employee;
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 
 	@Override
 	public String toString() {
 		return "SalaryStructure [idSalaryStructure=" + idSalaryStructure + ", basicSalary=" + basicSalary + ", medical="
 				+ medical + ", houseRent=" + houseRent + ", createDate=" + createDate + ", updateDate=" + updateDate
-				+ ", employee=" + employee + "]";
+				+ ", employee=" + employee + ", status=" + status + "]";
 	}
+
+	
 	
 	
 }

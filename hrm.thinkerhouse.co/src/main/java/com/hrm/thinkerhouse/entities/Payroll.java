@@ -43,6 +43,10 @@ public class Payroll {
 	@JoinColumn(name = "id_employee")
 	private Employee employee;
 	
+	@ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+	@JoinColumn(name = "id_users")
+	private Users users;
+	
 	@OneToMany(mappedBy = "payroll")
 	private List<PaymentHistory> paymentHistories;
 	
@@ -138,6 +142,14 @@ public class Payroll {
 		this.employee = employee;
 	}
 
+	public Users getUsers() {
+		return users;
+	}
+
+	public void setUsers(Users users) {
+		this.users = users;
+	}
+
 	public List<PaymentHistory> getPaymentHistories() {
 		return paymentHistories;
 	}
@@ -146,33 +158,16 @@ public class Payroll {
 		this.paymentHistories = paymentHistories;
 	}
 
-	public Payroll(int idPayroll, int month, Double basicSalary, Double totalAllowences, Double totalDeductions,
-			Double netSalary, String approvedBy, int status, Date createDate, Date updateDate, Employee employee,
-			List<PaymentHistory> paymentHistories) {
-		super();
-		this.idPayroll = idPayroll;
-		this.month = month;
-		this.basicSalary = basicSalary;
-		this.totalAllowences = totalAllowences;
-		this.totalDeductions = totalDeductions;
-		this.netSalary = netSalary;
-		this.approvedBy = approvedBy;
-		this.status = status;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.employee = employee;
-		this.paymentHistories = paymentHistories;
-	}
-
 	@Override
 	public String toString() {
 		return "Payroll [idPayroll=" + idPayroll + ", month=" + month + ", basicSalary=" + basicSalary
 				+ ", totalAllowences=" + totalAllowences + ", totalDeductions=" + totalDeductions + ", netSalary="
 				+ netSalary + ", approvedBy=" + approvedBy + ", status=" + status + ", createDate=" + createDate
-				+ ", updateDate=" + updateDate + ", employee=" + employee + ", paymentHistories=" + paymentHistories
-				+ "]";
+				+ ", updateDate=" + updateDate + ", employee=" + employee + ", users=" + users + ", paymentHistories="
+				+ paymentHistories + "]";
 	}
 
+	
 	
 	
 }

@@ -1,6 +1,7 @@
 package com.hrm.thinkerhouse.entities;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -14,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -42,6 +44,9 @@ public class Users {
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_employee")
     private Employee employee;
+	
+	@OneToMany(mappedBy = "users")
+	private List<Payroll> payrolls;
 	
 	public Users() {
 		
@@ -103,8 +108,24 @@ public class Users {
 		this.role = role;
 	}
 
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+	public List<Payroll> getPayrolls() {
+		return payrolls;
+	}
+
+	public void setPayrolls(List<Payroll> payrolls) {
+		this.payrolls = payrolls;
+	}
+
 	public Users(int idUsers, String username, String password, String status, Date createDate, Date updateDate,
-			Role role) {
+			Role role, Employee employee, List<Payroll> payrolls) {
 		super();
 		this.idUsers = idUsers;
 		this.username = username;
@@ -113,14 +134,16 @@ public class Users {
 		this.createDate = createDate;
 		this.updateDate = updateDate;
 		this.role = role;
+		this.employee = employee;
+		this.payrolls = payrolls;
 	}
 
 	@Override
 	public String toString() {
 		return "Users [idUsers=" + idUsers + ", username=" + username + ", password=" + password + ", status=" + status
-				+ ", createDate=" + createDate + ", updateDate=" + updateDate + ", role=" + role + "]";
+				+ ", createDate=" + createDate + ", updateDate=" + updateDate + ", role=" + role + ", employee="
+				+ employee + ", payrolls=" + payrolls + "]";
 	}
-	
-	
+
 	
 }

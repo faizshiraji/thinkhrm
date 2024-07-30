@@ -29,9 +29,9 @@ public class AttendanceLog {
 	private Date outTime;
 	private String attendStatus;
 	private String note;
-	private int status;
-	private int inId;
-	private int outId;
+	private Integer status;
+	private Integer inId;
+	private Integer outId;
 	
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "id_employee")
@@ -85,7 +85,7 @@ public class AttendanceLog {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
@@ -93,7 +93,7 @@ public class AttendanceLog {
 		return inId;
 	}
 
-	public void setInId(int inId) {
+	public void setInId(Integer inId) {
 		this.inId = inId;
 	}
 
@@ -101,7 +101,7 @@ public class AttendanceLog {
 		return outId;
 	}
 
-	public void setOutId(int outId) {
+	public void setOutId(Integer outId) {
 		this.outId = outId;
 	}
 
@@ -113,8 +113,8 @@ public class AttendanceLog {
 		this.employee = employee;
 	}
 
-	public AttendanceLog(int idAttendanceLog, Date inTime, Date outTime, String attendStatus, String note, int status,
-			int inId, int outId, Employee employee) {
+	public AttendanceLog(int idAttendanceLog, Date inTime, Date outTime, String attendStatus, String note, Integer status,
+			Integer inId, Integer outId, Employee employee) {
 		super();
 		this.idAttendanceLog = idAttendanceLog;
 		this.inTime = inTime;

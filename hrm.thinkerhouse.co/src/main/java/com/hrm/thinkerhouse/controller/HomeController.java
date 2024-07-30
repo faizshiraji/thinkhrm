@@ -161,7 +161,7 @@ public class HomeController {
 	}
 	
 	@PostMapping("/download_device_userinfo")
-	public String downloadDeviceUserInfo(@RequestParam("deviceId") Integer deviceId, Model model) {
+	public String downloadDeviceUserInfo(@RequestParam("deviceId") Integer deviceId, Model model) throws IOException {
 
 		String msgString = "";
 		
@@ -225,13 +225,11 @@ public class HomeController {
           }
           msgString = "Download Successfully!";
 			
-		} catch (IOException e) {
+		} catch (IOException | DeviceNotConnectException | ParseException e) {
 			msgString = "Got error : " + e.getMessage();
 			
-		} catch (ParseException e) {
-			msgString = "Got error : " + e.getMessage();
-		} catch (DeviceNotConnectException e) {
-			msgString = "Got error : " + e.getMessage();
+		} finally {
+				zkTerminal.disconnect();
 		}
 	    
 	    List<DeviceUserInfo> deviceUserInfos = deviceUserInfoService.getDeviceUserInfos();
@@ -361,7 +359,8 @@ public class HomeController {
 	    String msgString = "";
 
 	    try {
-	        zkTerminal.connect();
+	        ZKCommandReply connect = zkTerminal.connect();
+	        
 	        List<DeviceUserInfo> deviceUserInfos = deviceUserInfoService.getDeviceUserInfos();
 	        
 	        if (deviceUserInfos == null || deviceUserInfos.isEmpty()) {
@@ -369,9 +368,11 @@ public class HomeController {
 	            model.addAttribute("msgString", "No device user info records found.");
 	            return "admin/loaddata";
 	        }
+	        System.out.println(connect.getCode());
 
 	        List<AttendanceRecord> attendanceRecords = zkTerminal.getAttendanceRecords();
-	        System.out.println(attendanceRecords.size());
+	        System.out.println("Number of attendance records found: " + attendanceRecords.size());
+	        
 	        
 	        if (attendanceRecords == null || attendanceRecords.isEmpty()) {
 	            System.out.println("No attendance records found.");
@@ -401,6 +402,7 @@ public class HomeController {
 	    } catch (IOException | DeviceNotConnectException | ParseException e) {
 	        // Log the exception
 	        System.out.println("Error occurred while downloading logs: " + e);
+	        
 	        msgString = "Error occurred while downloading logs: " + e.getMessage();
 	        // Add error message to the model
 	        model.addAttribute("msgString", msgString);
@@ -417,13 +419,17 @@ public class HomeController {
 	    return "admin/loaddata";
 	}
 
+	
+	
+	
+	
 	// Method to check for duplicate record
 	private boolean isDuplicate(AttendanceRecord attendanceRecord, Devices devices) {
 	    // Replace this with actual code to check the database for existing record
 	    List<DevicePunchLog> existingLogs = devicePunchLogService.getDevicePunchLogByUserIDAndRecordTimeAndDevices(
 	        attendanceRecord.getUserID(), attendanceRecord.getRecordTime(), devices);
 
-	    return !existingLogs.isEmpty();
+	    return existingLogs != null && !existingLogs.isEmpty();
 	}
 
 	private DevicePunchLog createPunchLog(AttendanceRecord attendanceRecord, Devices devices) {
@@ -437,6 +443,7 @@ public class HomeController {
 	    punchLog.setVerifyType(attendanceRecord.getVerifyType().toString());
 	    return punchLog;
 	}
+
 
 
 	

@@ -302,7 +302,6 @@ public class ZKTerminal {
     }
 
 
-    // Get all devices Attendance Data
     public List<AttendanceRecord> getAttendanceRecords() throws IOException, ParseException {
         int[] toSend = ZKCommand.getPacket(CommandCodeEnum.CMD_ATTLOG_RRQ, sessionId, replyNo, null);
         byte[] buf = new byte[toSend.length];
@@ -316,6 +315,12 @@ public class ZKTerminal {
         socket.send(packet);
         replyNo++;
         int[] response = readResponse();
+        
+        if (response.length < 2) {
+            // Log or handle the case where the response is unexpectedly short
+            throw new IOException("Invalid response length: " + response.length);
+        }
+
         CommandReplyCodeEnum replyCode = CommandReplyCodeEnum.decode(response[0] + (response[1] * 0x100));
         List<AttendanceRecord> attendanceRecords = new ArrayList<>();
         StringBuilder attendanceBuffer = new StringBuilder();
@@ -353,22 +358,27 @@ public class ZKTerminal {
         while (attendance.length() >= 80) {
             String record = attendance.substring(0, 80);
 
+            if (record.length() < 4) break; // Ensure record has enough length before slicing
             int seq = Integer.parseInt(record.substring(2, 4) + record.substring(0, 2), 16);
             record = record.substring(4);
 
             StringBuilder userIdBuilder = new StringBuilder();
             for (int i = 0; i < 18; i += 2) {
+                if (i + 2 > record.length()) break; // Ensure enough length before slicing
                 userIdBuilder.append((char) Integer.parseInt(record.substring(i, i + 2), 16));
             }
             String userId = userIdBuilder.toString();
 
             if (record.length() < 50) break; // Ensure record has enough length before slicing
-
             record = record.substring(48);
+            
+            if (record.length() < 2) break; // Ensure record has enough length before slicing
             int method = Integer.parseInt(record.substring(0, 2), 16);
             AttendanceTypeEnum attendanceType = AttendanceTypeEnum.values()[method];
 
             record = record.substring(2);
+            
+            if (record.length() < 8) break; // Ensure record has enough length before slicing
             long encDate = Integer.parseInt(record.substring(6, 8), 16) * 0x1000000L
                          + Integer.parseInt(record.substring(4, 6), 16) * 0x10000L
                          + Integer.parseInt(record.substring(2, 4), 16) * 0x100L
@@ -377,8 +387,9 @@ public class ZKTerminal {
             Date attendanceDate = HexUtils.extractDate(encDate);
 
             if (record.length() < 10) break; // Ensure record has enough length before slicing
-
             record = record.substring(8);
+            
+            if (record.length() < 2) break; // Ensure record has enough length before slicing
             int operation = Integer.parseInt(record.substring(0, 2), 16);
             AttendanceStateEnum attendanceState = AttendanceStateEnum.values()[operation];
 

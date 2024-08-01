@@ -15,6 +15,7 @@ public interface DevicePunchLogService {
 	List<DevicePunchLog> getDevicePunchLogsByDateRange(Date startDate, Date endDate);
 	List<DevicePunchLog> getDevicePunchLogByUserIDAndRecordTimeAndDevices(String userID, Date recordTime, Devices devices);
 	List<DevicePunchLog> getDevicePUnchLogByStatus(int logStatus);
+	List<DevicePunchLog> getDevicePunchLogByDevice(Devices devices);
 	public DevicePunchLog addDevicePunchLog(DevicePunchLog devicePunchLog);
 	public DevicePunchLog updateDevicePunchLog(DevicePunchLog devicePunchLog);
 	public void deleteDevicePunchLog(int idDevicePunchLog);

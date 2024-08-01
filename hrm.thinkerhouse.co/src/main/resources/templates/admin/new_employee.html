@@ -215,7 +215,7 @@
                                         <div class="col-sm-9">
                                             <select class="form-select" name="branch" th:field="*{branch}">
                                                 <option value=0>Select</option>
-                                                <option th:each="branch : ${branchs}" th:value="${branch.idBranch}" th:text="${branch.branchName}">Category2</option>
+                                                <option th:each="branch : ${branches}" th:value="${branch.idBranch}" th:text="${branch.branchName}">Category2</option>
                                             </select>
                                         </div>
                                     </div>

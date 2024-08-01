@@ -28,4 +28,7 @@ public interface DevicePunchLogRepo extends JpaRepository<DevicePunchLog, Intege
     
     @Query("SELECT d FROM DevicePunchLog d WHERE d.logStatus = :logStatus")
     List<DevicePunchLog> findByStatus(@Param("logStatus") Integer logStatus);
+    
+    @Query("SELECT d FROM DevicePunchLog d WHERE d.devices = :devices")
+    List<DevicePunchLog> findByDevice(@Param("devices") Devices devices);
 }

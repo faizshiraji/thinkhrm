@@ -71,4 +71,9 @@ public class DevicePunchLongServiceImpl implements DevicePunchLogService {
 	public List<DevicePunchLog> getDevicePUnchLogByStatus(int logStatus) {
 		return devicePunchLogRepo.findByStatus(logStatus);
 	}
+
+	@Override
+	public List<DevicePunchLog> getDevicePunchLogByDevice(Devices devices) {
+		return devicePunchLogRepo.findByDevice(devices);
+	}
 }

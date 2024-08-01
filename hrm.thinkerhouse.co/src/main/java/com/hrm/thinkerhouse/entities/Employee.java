@@ -3,6 +3,9 @@ package com.hrm.thinkerhouse.entities;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -23,51 +26,62 @@ import jakarta.persistence.TemporalType;
 public class Employee {
 
 	@Id
-	@Column(name = "id_employee")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idEmployee;
-	private String firstName;
-	private String lastName;
-	@Column(unique = true)
-	private String email;
-	private String phone;
-	private String image;
-	private String position;
-	@Column(name = "userid", nullable = true)
-	private String userId;
-	
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_employee")
+    private int idEmployee;
+
+    @NotEmpty(message = "First name is required")
+    private String firstName;
+
+    private String lastName;
+
+    @Email(message = "Email should be valid")
+    @NotEmpty(message = "Email is required")
+    @Column(unique = true)
+    private String email;
+
+    @NotEmpty(message = "Phone number is required")
+    private String phone;
+
+    private String image;
+    private String position;
+
+    @Column(name = "userid", nullable = true)
+    private String userId;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Temporal(TemporalType.DATE)
     private Date date;
-	private Integer status;
 
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-	@JoinColumn(name = "id_department")
-	private Department department;
-	
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-	@JoinColumn(name = "id_branch")
-	private Branch branch;
-	
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-	@JoinColumn(name = "id_team")
-	private Team team;
-	
-	@OneToOne(mappedBy = "employee")
-	private Users users;
-	
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-	@JoinColumn(name = "id_shift")
-	private Shift shift;
-	
-	@OneToMany(mappedBy = "employee")
-	private List<Payroll> payrolls;
-	
-	
-	@DateTimeFormat(iso = ISO.DATE_TIME)
-	private Date createDate;
-	@DateTimeFormat(iso = ISO.DATE_TIME)
-	private Date updateDate;
+    private Integer status;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "id_department")
+    private Department department;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "id_branch")
+    private Branch branch;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "id_team")
+    private Team team;
+
+    @OneToOne(mappedBy = "employee")
+    private Users users;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "id_shift")
+    private Shift shift;
+
+    @OneToMany(mappedBy = "employee")
+    private List<Payroll> payrolls;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date createDate;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date updateDate;
 	
 	public Employee() {
 		// TODO Auto-generated constructor stub
@@ -225,7 +239,5 @@ public class Employee {
 				+ ", team=" + team + ", users=" + users + ", shift=" + shift + ", payrolls=" + payrolls
 				+ ", createDate=" + createDate + ", updateDate=" + updateDate + "]";
 	}
-
-	
 
 }

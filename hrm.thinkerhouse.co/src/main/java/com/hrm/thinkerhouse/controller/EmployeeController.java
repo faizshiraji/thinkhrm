@@ -1,7 +1,12 @@
 package com.hrm.thinkerhouse.controller;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -60,24 +65,19 @@ public class EmployeeController {
     }
 	
 	@GetMapping("/new_employee")
-	public String newEmployee(Model model) {
-	    List<Department> departments = departpentServices.getDepartments();
-	    List<Branch> branchs = branchService.getBranchs();
-	    List<Team> teams = teamService.geTeams();
-	    
-	    String code = null;
-		
-		model.addAttribute("code",code);
-	    model.addAttribute("employee", new Employee());
-	    model.addAttribute("teams", teams);
-	    model.addAttribute("branchs", branchs);
-	    model.addAttribute("departments", departments);
-	    
-	    return "admin/new_employee";
-	}
+    public String newEmployee(Model model) {
+        List<Department> departments = departpentServices.getDepartments();
+        List<Branch> branches = branchService.getBranchs();
+        List<Team> teams = teamService.geTeams();
 
+        model.addAttribute("employee", new Employee());
+        model.addAttribute("departments", departments);
+        model.addAttribute("branches", branches);
+        model.addAttribute("teams", teams);
 
-	
+        return "admin/new_employee";
+    }
+
 	@PostMapping("/add_employee")
 	public String addEmployee(@ModelAttribute("employee") Employee employee, 
 	                          BindingResult result, 

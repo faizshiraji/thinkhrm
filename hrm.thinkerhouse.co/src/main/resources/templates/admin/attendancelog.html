@@ -78,19 +78,19 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:if="${#lists.isEmpty(attendanceLogsPage.content)}">
-                                            <td colspan="8">You don't have any branch yet.</td>
+                                        <tr th:if="${attendanceLogs == null || #lists.isEmpty(attendanceLogs)}">
+                                            <td colspan="8">No attendance logs found.</td>
                                         </tr>
                                         <tr th:if="${msgString != null}">
                                             <td colspan="8"><span th:text="${msgString}"></span></td>
                                         </tr>
-                                        <tr th:each="attendanceLog, stat : ${attendanceLogsPage}">
-                                            <td th:text="${currentPage * pageSize + stat.index + 1}"></td>
+                                        <tr th:each="attendanceLog, stat : ${attendanceLogs}">
+                                            <td th:text="${stat.count}"></td>
                                             <td th:text="${attendanceLog.employee.userId}"></td>
-                                            <td th:text="${attendanceLog.employee.firstName}"></td>
-                                            <td th:text="${attendanceLog.inTime}"></td>
+                                            <td th:text="${attendanceLog.employee.firstName + ' ' + attendanceLog.employee.lastName}"></td>
+                                            <td th:text="${#dates.format(attendanceLog.inTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                                             <td th:text="${attendanceLog.inId}"></td>
-                                            <td th:text="${attendanceLog.outTime}"></td>
+                                            <td th:text="${#dates.format(attendanceLog.outTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                                             <td th:text="${attendanceLog.outId}"></td>
                                             <td th:text="${attendanceLog.status}"></td>
                                         </tr>
@@ -101,7 +101,7 @@
                                     <div class="btn-group" role="group" aria-label="Pagination">
                                         <a th:if="${currentPage > 0}" th:href="@{all_attendancelog(page=${currentPage - 1}, size=${pageSize}, fromDate=${fromDate}, toDate=${toDate})}"
                                            class="btn btn-primary"><i class="fa fa-angle-double-left"></i></a>
-                                        <span class="btn btn-outline-secondary" th:text="'Page ' + ${currentPage + 1} + ' of ' + ${totalPages}"></span>
+                                        <span class="btn btn-outline-secondary" th:text="'Page ' + (${currentPage != null ? currentPage + 1 : 0}) + ' of ' + (${totalPages != null ? totalPages : 0})"></span>
                                         <a th:if="${currentPage < totalPages - 1}" th:href="@{all_attendancelog(page=${currentPage + 1}, size=${pageSize}, fromDate=${fromDate}, toDate=${toDate})}"
                                            class="btn btn-primary"><i class="fa fa-angle-double-right"></i></a>
                                     </div>

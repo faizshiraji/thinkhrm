@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +45,7 @@ import com.hrm.thinkerhouse.entities.Employee;
 import com.hrm.thinkerhouse.services.DeviceService;
 import com.hrm.thinkerhouse.services.DeviceUserInfoService;
 import com.hrm.thinkerhouse.services.EmployeeService;
+import com.hrm.thinkerhouse.services.ShiftService;
 
 import net.bytebuddy.utility.privilege.GetMethodAction;
 	
@@ -65,6 +67,9 @@ import net.bytebuddy.utility.privilege.GetMethodAction;
 		@Autowired
 		private DeviceUserInfoService deviceUserInfoService;
 		
+		@Autowired
+		private ShiftService shiftService;
+		
 		private static final Logger logger = LoggerFactory.getLogger(AttendanceLogController.class);
 		
 		
@@ -79,7 +84,7 @@ import net.bytebuddy.utility.privilege.GetMethodAction;
 
 		    try {
 		        for (Employee employee : employees) {
-		        	System.out.println(employee.getFirstName());
+		            System.out.println(employee.getFirstName());
 		            if (employee.getUserId() != null && !employee.getUserId().isEmpty()) {
 		                List<DevicePunchLog> devicePunchLogByUserID = devicePunchLogService.getDevicePunchLogByUserID(employee.getUserId());
 
@@ -117,13 +122,21 @@ import net.bytebuddy.utility.privilege.GetMethodAction;
 		                                            Date firstPunch = logs.get(0).getRecordTime();
 		                                            Date lastPunch = logs.size() > 1 ? logs.get(logs.size() - 1).getRecordTime() : null;
 
+		                                            // Fetch the shift for the employee
+		                                            Shift shift = shiftService.getShift(employeeByUserId.getShift().getIdShift());
+		                                            LocalTime startTime = shift.getStartTime();
+
+		                                            // Compare inTime with startTime + 5 minutes
+		                                            LocalTime inTime = firstPunch.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+		                                            LocalTime startTimePlus5Min = startTime.plusMinutes(5);
+
 		                                            AttendanceLog attendanceLog = new AttendanceLog();
 		                                            attendanceLog.setInTime(firstPunch);
 		                                            attendanceLog.setOutTime(lastPunch);
 		                                            attendanceLog.setEmployee(employeeByUserId);
-		                                            attendanceLog.setAttendStatus("Present");
+		                                            attendanceLog.setAttendStatus(inTime.isAfter(startTimePlus5Min) ? "Late" : "Present");
 		                                            attendanceLog.setNote("");
-		                                            attendanceLog.setStatus(1);
+		                                            attendanceLog.setStatus(inTime.isAfter(startTimePlus5Min) ? 2 : 1);
 		                                            attendanceLog.setInId(logs.get(0).getIdDevicePunchLog());
 		                                            attendanceLog.setOutId(logs.size() > 1 ? logs.get(logs.size() - 1).getIdDevicePunchLog() : 0);
 

@@ -92,7 +92,12 @@
                                             <td th:text="${attendanceLog.inId}"></td>
                                             <td th:text="${#dates.format(attendanceLog.outTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                                             <td th:text="${attendanceLog.outId}"></td>
-                                            <td th:text="${attendanceLog.status}"></td>
+                                            <td th:if="${attendanceLog.status == 2}">
+                                                <span th:text="'Late'" style="color:red"></span>
+                                            </td>
+                                            <td th:unless="${attendanceLog.status == 2}">
+                                                <span th:text="'On Time'"></span>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>

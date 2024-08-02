@@ -39,77 +39,70 @@ public class SalaryComponentController {
 	
 	@GetMapping("/new_salary_component")
 	public String newSalaryComponent(Model model) {
-		
-		SalaryComponents salaryComponent = new SalaryComponents();
-		List<Employee> employeeByStatus = employeeService.getEmployeeByStatus(1);
-		
-		model.addAttribute("employeeByStatus", employeeByStatus);
-		model.addAttribute("salaryComponent", salaryComponent);
-		
-		
-		return "admin/new_salary_component";
-		
+	    SalaryComponents salaryComponent = new SalaryComponents();
+	    List<Employee> employeeByStatus = employeeService.getEmployeeByStatus(1);
+
+	    model.addAttribute("employeeByStatus", employeeByStatus);
+	    model.addAttribute("salaryComponent", salaryComponent);
+	    model.addAttribute("code", 1);
+
+	    return "admin/new_salary_component";
 	}
-	
+
 	@PostMapping("/add_salary_component")
 	public String addSalaryComponent(
-			@ModelAttribute("") SalaryComponents salaryComponent,
-			Model model) {
-		
-		String msgString = "";
-		
-		salaryComponent.setCreateDate(new Date());
-		salaryComponent.setUpdateDate(new Date());
-		
-		salaryComponentsService.addSalaryComponents(salaryComponent);
-		
-		msgString = "Your salary component added successfully.";
-		
-		model.addAttribute("msgString", msgString);
-		
-		return "admin/salarycompoment";
-		
-	}
-	
-	@GetMapping("/edit_salaryComponent/{id}")
-	public String editSalaryComponent(@PathVariable("id") Integer id, Model model ) {
-		
-		SalaryComponents salaryComponent = salaryComponentsService.getSalaryComponents(id);
-		
-		
-		List<Employee> employeeByStatus = employeeService.getEmployeeByStatus(1);
-		
-		model.addAttribute("employeeByStatus", employeeByStatus);
-		model.addAttribute("salaryComponent", salaryComponent);
-		
-		return "admin/new_salary_component";
-		
-	}
-	
-	@PostMapping("/updatesalarycomponent/{id}")
-	public String updateSalaryComponent(@PathVariable("id") Integer id, 
-										@ModelAttribute("salarycomponent") SalaryComponents salaryComponent, 
-										Model model) {
-		SalaryComponents editSalaryComponent = salaryComponentsService.getSalaryComponents(id);
-		
-		editSalaryComponent.setEmployee(salaryComponent.getEmployee());
-		editSalaryComponent.setCompomentName(salaryComponent.getCompomentName());
-		editSalaryComponent.setAmount(salaryComponent.getAmount());
-		editSalaryComponent.setStatus(salaryComponent.getStatus());
-		editSalaryComponent.setUpdateDate(new Date());
-		
-		salaryComponentsService.updateSalaryComponents(editSalaryComponent);
-		
-		String msgString = "Salary Component updated successfully.";
-		
-		List<SalaryComponents> salaryComponents = salaryComponentsService.getSalaryComponents();
+	        @ModelAttribute("salarycomponent") SalaryComponents salaryComponent,
+	        Model model) {
+
+	    String msgString;
+
+	    salaryComponent.setCreateDate(new Date());
+	    salaryComponent.setUpdateDate(new Date());
+
+	    salaryComponentsService.addSalaryComponents(salaryComponent);
+
+	    msgString = "Your salary component added successfully.";
+	    List<SalaryComponents> salaryComponents = salaryComponentsService.getSalaryComponents();
 		
 		model.addAttribute("salaryComponents", salaryComponents);
-		
-		model.addAttribute("msgString", msgString);
-		
-		return "admin/salarycompoment";
-		
+	    model.addAttribute("msgString", msgString);
+
+	    return "admin/salarycompoment";  // Ensure this template exists in the correct path
+	}
+
+	@GetMapping("/edit_salaryComponent/{id}")
+	public String editSalaryComponent(@PathVariable("id") Integer id, Model model) {
+	    SalaryComponents salaryComponent = salaryComponentsService.getSalaryComponents(id);
+	    List<Employee> employeeByStatus = employeeService.getEmployeeByStatus(1);
+
+	    model.addAttribute("employeeByStatus", employeeByStatus);
+	    model.addAttribute("salaryComponent", salaryComponent);
+	    model.addAttribute("code", 0);
+	    return "admin/new_salary_component";
+	}
+
+	@PostMapping("/updatesalarycomponent/{id}")
+	public String updateSalaryComponent(@PathVariable("id") Integer id,
+	                                    @ModelAttribute("salarycomponent") SalaryComponents salaryComponent,
+	                                    Model model) {
+	    SalaryComponents editSalaryComponent = salaryComponentsService.getSalaryComponents(id);
+
+	    editSalaryComponent.setEmployee(salaryComponent.getEmployee());
+	    editSalaryComponent.setCompomentName(salaryComponent.getCompomentName());
+	    editSalaryComponent.setAmount(salaryComponent.getAmount());
+	    editSalaryComponent.setStatus(salaryComponent.getStatus());
+	    editSalaryComponent.setUpdateDate(new Date());
+
+	    salaryComponentsService.updateSalaryComponents(editSalaryComponent);
+
+	    String msgString = "Salary Component updated successfully.";
+
+	    List<SalaryComponents> salaryComponents = salaryComponentsService.getSalaryComponents();
+
+	    model.addAttribute("salaryComponents", salaryComponents);
+	    model.addAttribute("msgString", msgString);
+
+	    return "admin/salarycomponent";  // Ensure this template exists in the correct path
 	}
 	
 	@GetMapping("/del_salaryComponent/{id}")

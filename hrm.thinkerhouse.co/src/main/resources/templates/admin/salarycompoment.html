@@ -84,7 +84,7 @@
                             </td>
                             <td th:unless="${salaryComponent.status != 3}">
                             	<a type="button" class="btn btn-primary btn-md" href="#">Edit</a>
-                                <a type="button" class="btn btn-danger btn-md" href="#">Delete</a>
+                                <a type="button" class="btn btn-danger btn-md" th:href="@{/del_salaryComponent/{id}(id=${salaryComponent.idSalaryComponent})}">Delete</a>
                             </td>
                           </tr>
                         </tbody>

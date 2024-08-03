@@ -98,11 +98,11 @@ public class SalaryComponentController {
 	    String msgString = "Salary Component updated successfully.";
 
 	    List<SalaryComponents> salaryComponents = salaryComponentsService.getSalaryComponents();
-
-	    model.addAttribute("salaryComponents", salaryComponents);
+		
+		model.addAttribute("salaryComponents", salaryComponents);
 	    model.addAttribute("msgString", msgString);
 
-	    return "admin/salarycomponent";  // Ensure this template exists in the correct path
+	    return "admin/salarycompoment";  // Ensure this template exists in the correct path
 	}
 	
 	@GetMapping("/del_salaryComponent/{id}")

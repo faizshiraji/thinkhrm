@@ -79,43 +79,6 @@ public class HomeController {
         return "admin/home";
     }
 	
-
-	
-//	@GetMapping("/attendance_records")
-//	public String attendanceRecords() {
-//		
-////		String startDate = "2024-06-25 00:00:00.000";
-////		String endDate = "2024-06-25 23:59:59.999";
-////		
-////		
-////		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-////
-////        try {
-////            Date start = formatter.parse(startDate);
-////            Date end = formatter.parse(endDate);
-////
-////            List<DevicePunchLog> devicePunchLogsByDateRange = devicePunchLogService.getDevicePunchLogsByDateRange(start, end);
-////
-////            for (DevicePunchLog devicePunchLog : devicePunchLogsByDateRange) {
-////                System.out.println("Hello - " + devicePunchLog.getRecordTime());
-////            }
-////
-////        } catch (ParseException e) {
-////            System.out.println("Error Message - " + e.getMessage());
-////        }
-////		
-//		
-//		
-//		
-//		
-//		return "admin/attendancelog";
-//		
-//	}
-	@GetMapping("/holidaycal")
-	public String holidayCal() {
-		return "admin/holiday";
-		
-	}
 	@GetMapping("/request")
 	public String requests() {
 		return "admin/request";

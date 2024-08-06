@@ -1,80 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head th:replace="~{admin/fragments/fragment :: header}"></head>
-  <body>
-    <div class="container-scroller">
-      <!-- partial:../../partials/_navbar.html -->
-      <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:../../partials/_sidebar.html -->
+<head th:replace="~{admin/fragments/fragment :: header}">
+    <title>Holiday Calendar</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container-scroller">
+    <nav th:replace="~{admin/fragments/fragment :: nav1}"></nav>
+    <div class="container-fluid page-body-wrapper">
         <nav th:replace="~{admin/fragments/fragment :: nav2}"></nav>
-        <!-- partial -->
         <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="row">
-              <div class="col-lg-16 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-sm-flex justify-content-between align-items-start">
-                      <div>
-                          <h4 class="card-title card-title-dash">Holiday Calendar</h4>
-                      </div>
-                  </div>
-                    
-                  <div class="container mt-4">
-                    <div class="calendar-controls">
-                        <button id="prevMonth" class="btn btn-primary">&lt;</button>
-                        <select id="monthSelect" class="form-control mx-2" style="width: 150px;">
-                            <option value="0">January</option>
-                            <option value="1">February</option>
-                            <option value="2">March</option>
-                            <option value="3">April</option>
-                            <option value="4">May</option>
-                            <option value="5">June</option>
-                            <option value="6">July</option>
-                            <option value="7">August</option>
-                            <option value="8">September</option>
-                            <option value="9">October</option>
-                            <option value="10">November</option>
-                            <option value="11">December</option>
-                        </select>
-                        <select id="yearSelect" class="form-control mx-2" style="width: 100px;">
-                            <!-- Years will be populated by JavaScript -->
-                        </select>
-                        <button id="nextMonth" class="btn btn-primary">&gt;</button>
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-sm-flex justify-content-between align-items-start">
+                                    <h4 class="card-title card-title-dash">Holiday Calendar</h4>
+                                </div>
+                                <div class="container mt-4">
+                                    <div class="calendar-controls mb-3">
+                                        <button id="prevMonth" class="btn btn-primary">&lt;</button>
+                                        <select id="monthSelect" class="form-control mx-2" style="width: 150px;">
+                                            <option value="0">January</option>
+                                            <option value="1">February</option>
+                                            <option value="2">March</option>
+                                            <option value="3">April</option>
+                                            <option value="4">May</option>
+                                            <option value="5">June</option>
+                                            <option value="6">July</option>
+                                            <option value="7">August</option>
+                                            <option value="8">September</option>
+                                            <option value="9">October</option>
+                                            <option value="10">November</option>
+                                            <option value="11">December</option>
+                                        </select>
+                                        <select id="yearSelect" class="form-control mx-2" style="width: 100px;">
+                                            <!-- Years will be populated by JavaScript -->
+                                        </select>
+                                        <button id="nextMonth" class="btn btn-primary">&gt;</button>
+                                    </div>
+                                    <table class="table calendar">
+                                        <thead>
+                                        <tr>
+                                            <th>Sun</th>
+                                            <th>Mon</th>
+                                            <th>Tue</th>
+                                            <th>Wed</th>
+                                            <th>Thu</th>
+                                            <th>Fri</th>
+                                            <th>Sat</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="calendarBody">
+                                        <!-- Calendar days will be populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="holidayDetails" class="mt-3"></div>
+                                <button id="addHolidayBtn" class="btn btn-success">Add Holiday</button>
+                                <form id="holidayForm" th:action="@{/addHoliday}" method="post" class="mt-3" th:object="${calender}">
+                                    <div class="form-group">
+                                        <label for="holidayName">Holiday Name</label>
+                                        <input type="text" class="form-control" id="holidayName" name="name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="holidayDate">Holiday Date</label>
+                                        <input type="date" class="form-control" id="holidayDate" name="date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="holidayDescription">Holiday Description</label>
+                                        <textarea class="form-control" id="holidayDescription" name="description" rows="3"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Add Holiday</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <table class="table calendar">
-                        <thead>
-                            <tr>
-                                <th>Sun</th>
-                                <th>Mon</th>
-                                <th>Tue</th>
-                                <th>Wed</th>
-                                <th>Thu</th>
-                                <th>Fri</th>
-                                <th>Sat</th>
-                            </tr>
-                        </thead>
-                        <tbody id="calendarBody">
-                            <!-- Calendar days will be populated by JavaScript -->
-                        </tbody>
-                    </table>
                 </div>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:../../partials/_footer.html -->
-          <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
-          <!-- partial -->
+            <footer th:replace="~{admin/fragments/fragment :: footer}"></footer>
         </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
     </div>
-    <div th:replace="~{admin/fragments/fragment :: footscript}"></div>
-  </body>
+</div>
+<div th:replace="~{admin/fragments/fragment :: footscript}"></div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        const cookieName = "holidays";
+        let holidays = getCookie(cookieName) ? JSON.parse(getCookie(cookieName)) : [];
+
+        function fetchHolidays() {
+            $.ajax({
+                url: '/api/holidays',
+                method: 'GET',
+                success: function (data) {
+                    holidays = data;
+                    setCookie(cookieName, JSON.stringify(holidays), 365);
+                    updateCalendar();
+                }
+            });
+        }
+
+        const currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+        const yearRange = 10;
+
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const cname = name + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(cname) === 0) {
+                    return c.substring(cname.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        function populateYearSelect() {
+            const yearSelect = $('#yearSelect');
+            yearSelect.empty();
+            for (let i = currentYear - yearRange; i <= currentYear + yearRange; i++) {
+                yearSelect.append(`<option value="${i}">${i}</option>`);
+            }
+        }
+
+        function updateCalendar() {
+            $('#monthSelect').val(currentMonth);
+            $('#yearSelect').val(currentYear);
+            renderCalendar(currentMonth, currentYear);
+        }
+
+        function renderCalendar(month, year) {
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const calendarBody = $('#calendarBody');
+            calendarBody.empty();
+
+            let date = 1;
+            for (let i = 0; i < 6; i++) {
+                let row = '<tr>';
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < firstDay) {
+                        row += '<td></td>';
+                    } else if (date > daysInMonth) {
+                        break;
+                    } else {
+                        const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+                        let holidayClass = '';
+                        let additionalClass = '';
+                        let holidayName = '';
+
+                        const holiday = holidays.find(h => h.date === dateString);
+                        if (holiday) {
+                            holidayClass = 'holiday';
+                            holidayName = holiday.name;
+                        }
+
+                        if (j === 5) { // Friday
+                            additionalClass = 'friday';
+                        }
+
+                        row += `<td class="${holidayClass} ${additionalClass}"><button class="date-btn ${holidayClass} ${additionalClass}" data-date="${dateString}">${date}<br>${holidayName}</button></td>`;
+                        date++;
+                    }
+                }
+                row += '</tr>';
+                calendarBody.append(row);
+            }
+        }
+
+        $('#monthSelect').change(function () {
+            currentMonth = parseInt($(this).val());
+            updateCalendar();
+        });
+
+        $('#yearSelect').change(function () {
+            currentYear = parseInt($(this).val());
+            updateCalendar();
+        });
+
+        $('#prevMonth').click(function () {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            updateCalendar();
+        });
+
+        $('#nextMonth').click(function () {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            updateCalendar();
+        });
+
+        $(document).on('click', '.date-btn', function () {
+            const date = $(this).data('date');
+            alert(`You clicked on ${date}`);
+            // Add your custom functionality here
+        });
+
+        $('#addHolidayBtn').click(function () {
+            $('#holidayForm').toggle();
+        });
+
+        $('#holidayForm').submit(function (e) {
+            e.preventDefault();
+            const holidayName = $('#holidayName').val();
+            const holidayDate = $('#holidayDate').val();
+            const holidayDescription = $('#holidayDescription').val();
+
+            holidays.push({ name: holidayName, date: holidayDate, description: holidayDescription });
+            setCookie(cookieName, JSON.stringify(holidays), 365);
+            updateCalendar();
+            $('#holidayForm')[0].reset();
+        });
+
+        // Initialize the
+        populateYearSelect();
+       	updateCalendar();
+    	fetchHolidays();
+});
+</script>
+</body>
 </html>

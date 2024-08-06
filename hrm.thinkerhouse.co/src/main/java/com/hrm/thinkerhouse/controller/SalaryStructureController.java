@@ -48,6 +48,9 @@ public class SalaryStructureController {
 		
 		model.addAttribute("salaryStructure", salaryStructure);
 		
+		model.addAttribute("code", 0);
+		
+		
 		return "admin/new_salaryStructure";
 		
 	}
@@ -85,6 +88,7 @@ public class SalaryStructureController {
 		
 		model.addAttribute("employeeByStatus", employeeByStatus);
 		model.addAttribute("salaryStructure", salaryStructure);
+		model.addAttribute("code", 1);
 		
 		return "admin/new_salaryStructure";
 		

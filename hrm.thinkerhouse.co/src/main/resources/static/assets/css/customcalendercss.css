@@ -1,0 +1,20 @@
+@charset "UTF-8";
+.calendar {
+    table-layout: fixed;
+}
+.calendar th, .calendar td {
+	width: 14.28%;
+	border: 1px solid #ddd;
+	text-align: center;
+	vertical-align: middle;
+	height: 100px;
+}
+.holiday {
+	background-color: #ffcccb !important;
+}
+.govt-holiday {
+	background-color: #ffcc00 !important;
+}
+.friday {
+	background-color: #add8e6 !important;
+}

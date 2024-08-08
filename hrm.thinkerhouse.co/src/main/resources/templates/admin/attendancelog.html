@@ -95,7 +95,13 @@
                                             <td th:if="${attendanceLog.status == 2}">
                                                 <span th:text="'Late'" style="color:red"></span>
                                             </td>
-                                            <td th:unless="${attendanceLog.status == 2}">
+                                            <td th:if="${attendanceLog.status == 3}">
+                                                <span th:text="'Holiday'" style="color:red"></span>
+                                            </td>
+                                            <td th:if="${attendanceLog.status == 4}">
+                                                <span th:text="'Absent'" style="color:red"></span>
+                                            </td>
+                                            <td th:if="${attendanceLog.status == 1}">
                                                 <span th:text="'On Time'"></span>
                                             </td>
                                         </tr>

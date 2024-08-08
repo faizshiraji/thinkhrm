@@ -3,6 +3,7 @@ package com.hrm.thinkerhouse.services;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,4 +23,5 @@ public interface AttendanceLogService {
 	public String calculateAttendanceStatus(AttendanceLog attendanceLog, LocalTime shiftStartTime);
 	public Page<AttendanceLog> getAttendanceLogs(Pageable pageable);
 	public Page<AttendanceLog> getAttendanceLogsByDateRange(Date startDate, Date endDate, Pageable pageable);
+	public Map<String, Long> getAttendanceStats(int userId, int month, int year);
 }

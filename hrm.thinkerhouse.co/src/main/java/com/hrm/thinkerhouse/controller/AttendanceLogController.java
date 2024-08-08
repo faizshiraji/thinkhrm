@@ -4,12 +4,14 @@
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 	import java.util.Date;
 import java.util.HashSet;
@@ -17,6 +19,7 @@ import java.util.List;
 	import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,13 +38,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hrm.thinkerhouse.entities.AttendanceLog;
-	import com.hrm.thinkerhouse.entities.DevicePunchLog;
+import com.hrm.thinkerhouse.entities.Calender;
+import com.hrm.thinkerhouse.entities.DevicePunchLog;
 import com.hrm.thinkerhouse.entities.DeviceUserInfo;
 import com.hrm.thinkerhouse.entities.Devices;
 import com.hrm.thinkerhouse.entities.Employee;
 	import com.hrm.thinkerhouse.entities.Shift;
 	import com.hrm.thinkerhouse.services.AttendanceLogService;
-	import com.hrm.thinkerhouse.services.DevicePunchLogService;
+import com.hrm.thinkerhouse.services.CalenderService;
+import com.hrm.thinkerhouse.services.DateCountService;
+import com.hrm.thinkerhouse.services.DevicePunchLogService;
 import com.hrm.thinkerhouse.services.DeviceService;
 import com.hrm.thinkerhouse.services.DeviceUserInfoService;
 import com.hrm.thinkerhouse.services.EmployeeService;
@@ -68,108 +74,131 @@ import net.bytebuddy.utility.privilege.GetMethodAction;
 		private DeviceUserInfoService deviceUserInfoService;
 		
 		@Autowired
+		private CalenderService calenderService;
+		
+		@Autowired
+		private DateCountService dateCountService;
+		
+		@Autowired
 		private ShiftService shiftService;
 		
 		private static final Logger logger = LoggerFactory.getLogger(AttendanceLogController.class);
 		
 		
 		@GetMapping("/collect_attendancelog")
-		public String collectAttendanceLog(Model model,
-		                                   @RequestParam(defaultValue = "0") int page,
-		                                   @RequestParam(defaultValue = "10") int size,
-		                                   @RequestParam(required = false) String fromDate,
-		                                   @RequestParam(required = false) String toDate) {
-		    String msgString = "";
-		    List<Employee> employees = employeeService.getEmployeeByStatus(1);
+	    public String collectAttendanceLog(Model model,
+	                                       @RequestParam(defaultValue = "0") int page,
+	                                       @RequestParam(defaultValue = "10") int size,
+	                                       @RequestParam(required = false) String fromDate,
+	                                       @RequestParam(required = false) String toDate) {
+	        String msgString = "";
+	        List<Employee> employees = employeeService.getEmployeeByStatus(1);
+	        List<Calender> holidays = calenderService.getCalenders();
 
-		    try {
-		        for (Employee employee : employees) {
-		            System.out.println(employee.getFirstName());
-		            if (employee.getUserId() != null && !employee.getUserId().isEmpty()) {
-		                List<DevicePunchLog> devicePunchLogByUserID = devicePunchLogService.getDevicePunchLogByUserID(employee.getUserId());
+	        try {
+	            for (Employee employee : employees) {
+	                List<DevicePunchLog> devicePunchLogByUserID = devicePunchLogService.getDevicePunchLogByUserID(employee.getUserId());
 
-		                if (devicePunchLogByUserID != null && !devicePunchLogByUserID.isEmpty()) {
-		                    for (DevicePunchLog deviceEmployee : devicePunchLogByUserID) {
-		                        if (deviceEmployee.getLogStatus() == 0) {
-		                            Employee employeeByUserId = employeeService.getEmployeeByUserId(deviceEmployee.getUserID());
+	                if (devicePunchLogByUserID != null && !devicePunchLogByUserID.isEmpty()) {
+	                    // Process attendance logs
+	                    processAttendanceLogs(employee, devicePunchLogByUserID, holidays);
+	                }
+	                // Ensure logs are generated for all days of the months found in DevicePunchLog
+	                generateLogsForAllDaysOfMonth(employee, devicePunchLogByUserID, holidays);
+	            }
+	        } catch (Exception e) {
+	            msgString = "We encountered an error: " + e.getMessage();
+	            logger.error("Error collecting attendance logs", e);
+	        }
 
-		                            if (employeeByUserId != null) {
-		                                List<DevicePunchLog> logByUserIDs = devicePunchLogService.getDevicePunchLogByUserID(employeeByUserId.getUserId());
+	        System.out.println(msgString);
 
-		                                if (logByUserIDs != null) {
-		                                    Map<String, List<DevicePunchLog>> punchesByDate = new TreeMap<>();
-		                                    SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+	        Page<AttendanceLog> attendanceLogsPage = attendanceLogService.getAttendanceLogs(PageRequest.of(page, size));
+	        model.addAttribute("attendanceLogs", attendanceLogsPage.getContent());
+	        model.addAttribute("currentPage", attendanceLogsPage.getNumber());
+	        model.addAttribute("totalPages", attendanceLogsPage.getTotalPages());
+	        model.addAttribute("pageSize", attendanceLogsPage.getSize());
+	        model.addAttribute("fromDate", fromDate);
+	        model.addAttribute("toDate", toDate);
+	        model.addAttribute("msgString", msgString);
 
-		                                    for (DevicePunchLog log : logByUserIDs) {
-		                                        String datePart = dateFormatter.format(log.getRecordTime());
-		                                        punchesByDate.computeIfAbsent(datePart, k -> new ArrayList<>()).add(log);
-		                                        DevicePunchLog devicePunchLog = devicePunchLogService.getDevicePunchLog(log.getIdDevicePunchLog());
+	        return "admin/attendancelog";
+	    }
 
-		                                        if (devicePunchLog != null) {
-		                                            devicePunchLog.setLogStatus(1);
-		                                            devicePunchLogService.updateDevicePunchLog(devicePunchLog);
-		                                        }
-		                                    }
+	    private void processAttendanceLogs(Employee employee, List<DevicePunchLog> devicePunchLogs, List<Calender> holidays) {
+	        Map<String, List<DevicePunchLog>> punchesByDate = devicePunchLogs.stream()
+	                .collect(Collectors.groupingBy(log -> new SimpleDateFormat("yyyy-MM-dd").format(log.getRecordTime())));
 
-		                                    List<AttendanceLog> attendanceLogs = new ArrayList<>();
+	        punchesByDate.forEach((date, logs) -> {
+	            logs.sort(Comparator.comparing(DevicePunchLog::getRecordTime));
+	            Date firstPunch = logs.get(0).getRecordTime();
+	            Date lastPunch = logs.size() > 1 ? logs.get(logs.size() - 1).getRecordTime() : null;
 
-		                                    for (Map.Entry<String, List<DevicePunchLog>> entry : punchesByDate.entrySet()) {
-		                                        List<DevicePunchLog> logs = entry.getValue();
+	            // Fetch the shift for the employee
+	            Shift shift = shiftService.getShift(employee.getShift().getIdShift());
+	            LocalTime startTime = shift.getStartTime();
 
-		                                        if (!logs.isEmpty()) {
-		                                            logs.sort(Comparator.comparing(DevicePunchLog::getRecordTime));
+	            // Compare inTime with startTime + 5 minutes
+	            LocalTime inTime = firstPunch.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+	            LocalTime startTimePlus5Min = startTime.plusMinutes(5);
 
-		                                            Date firstPunch = logs.get(0).getRecordTime();
-		                                            Date lastPunch = logs.size() > 1 ? logs.get(logs.size() - 1).getRecordTime() : null;
+	            AttendanceLog attendanceLog = new AttendanceLog();
+	            attendanceLog.setInTime(firstPunch);
+	            attendanceLog.setOutTime(lastPunch);
+	            attendanceLog.setEmployee(employee);
+	            attendanceLog.setAttendStatus(inTime.isAfter(startTimePlus5Min) ? "Late" : "Present");
+	            attendanceLog.setStatus(inTime.isAfter(startTimePlus5Min) ? 2 : 1);
+	            attendanceLog.setInId(logs.get(0).getIdDevicePunchLog());
+	            attendanceLog.setOutId(logs.size() > 1 ? logs.get(logs.size() - 1).getIdDevicePunchLog() : 0);
 
-		                                            // Fetch the shift for the employee
-		                                            Shift shift = shiftService.getShift(employeeByUserId.getShift().getIdShift());
-		                                            LocalTime startTime = shift.getStartTime();
+	            attendanceLogService.addAttendanceLog(attendanceLog);
+	        });
+	    }
 
-		                                            // Compare inTime with startTime + 5 minutes
-		                                            LocalTime inTime = firstPunch.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
-		                                            LocalTime startTimePlus5Min = startTime.plusMinutes(5);
+	    private void generateLogsForAllDaysOfMonth(Employee employee, List<DevicePunchLog> devicePunchLogs, List<Calender> holidays) {
+	        Set<LocalDate> punchDates = devicePunchLogs.stream()
+	                .map(log -> log.getRecordTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate())
+	                .collect(Collectors.toSet());
 
-		                                            AttendanceLog attendanceLog = new AttendanceLog();
-		                                            attendanceLog.setInTime(firstPunch);
-		                                            attendanceLog.setOutTime(lastPunch);
-		                                            attendanceLog.setEmployee(employeeByUserId);
-		                                            attendanceLog.setAttendStatus(inTime.isAfter(startTimePlus5Min) ? "Late" : "Present");
-		                                            attendanceLog.setNote("");
-		                                            attendanceLog.setStatus(inTime.isAfter(startTimePlus5Min) ? 2 : 1);
-		                                            attendanceLog.setInId(logs.get(0).getIdDevicePunchLog());
-		                                            attendanceLog.setOutId(logs.size() > 1 ? logs.get(logs.size() - 1).getIdDevicePunchLog() : 0);
+	        if (punchDates.isEmpty()) return;
 
-		                                            attendanceLogs.add(attendanceLog);
+	        // Get the range of months from the first to the last punch
+	        Map<Integer, Set<Integer>> yearMonthMap = punchDates.stream()
+	                .collect(Collectors.groupingBy(LocalDate::getYear, Collectors.mapping(LocalDate::getMonthValue, Collectors.toSet())));
 
-		                                            attendanceLogService.addAttendanceLog(attendanceLog);
-		                                        }
-		                                    }
-		                                }
-		                            }
-		                        }
-		                    }
-		                }
-		            }
-		        }
-		    } catch (Exception e) {
-		        msgString = "We encountered an error: " + e.getMessage();
-		        logger.error("Error collecting attendance logs", e);
-		    }
+	        List<Date> holidayDates = holidays.stream().map(Calender::getDate).collect(Collectors.toList());
 
-		    System.out.println(msgString);
+	        for (Map.Entry<Integer, Set<Integer>> entry : yearMonthMap.entrySet()) {
+	            int year = entry.getKey();
+	            for (int month : entry.getValue()) {
+	                for (int day = 1; day <= dateCountService.getDayCountForMonth(year, month); day++) {
+	                    LocalDate date = LocalDate.of(year, month, day);
+	                    Date currentDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-		    Page<AttendanceLog> attendanceLogsPage = attendanceLogService.getAttendanceLogs(PageRequest.of(page, size));
-		    model.addAttribute("attendanceLogs", attendanceLogsPage.getContent());
-		    model.addAttribute("currentPage", attendanceLogsPage.getNumber());
-		    model.addAttribute("totalPages", attendanceLogsPage.getTotalPages());
-		    model.addAttribute("pageSize", attendanceLogsPage.getSize());
-		    model.addAttribute("fromDate", fromDate);
-		    model.addAttribute("toDate", toDate);
-		    model.addAttribute("msgString", msgString);
+	                    if (!punchDates.contains(date)) {
+	                        AttendanceLog log = new AttendanceLog();
+	                        log.setEmployee(employee);
+	                        log.setInTime(currentDate);
+	                        log.setOutTime(currentDate);
+	                        log.setInId(-1); // Special value to indicate no punch
+	                        log.setOutId(-1); // Special value to indicate no punch
 
-		    return "admin/attendancelog";
-		}
+	                        if (holidayDates.contains(currentDate)) {
+	                            log.setAttendStatus("Holiday");
+	                            log.setStatus(3);
+	                        } else if (currentDate.before(new Date())) {
+	                            log.setAttendStatus("Absent");
+	                            log.setStatus(4);
+	                        } else {
+	                            continue; // Skip future dates
+	                        }
+
+	                        attendanceLogService.addAttendanceLog(log);
+	                    }
+	                }
+	            }
+	        }
+	    }
 		
 		@GetMapping("/all_attendancelog")
 	    public String allAttendanceLog(Model model,

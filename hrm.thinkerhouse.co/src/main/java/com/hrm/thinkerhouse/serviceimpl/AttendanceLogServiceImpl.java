@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -173,6 +174,22 @@ public class AttendanceLogServiceImpl implements AttendanceLogService {
   @Override
   public Page<AttendanceLog> getAttendanceLogs(Pageable pageable) {
       return attendanceLogRepo.findAll(pageable);
+  }
+
+  @Override
+  public Map<String, Long> getAttendanceStats(int userId, int month, int year) {
+      List<AttendanceLog> logs = attendanceLogRepo.findByEmployeeAndMonth(userId, month, year);
+      Map<String, Long> stats = new HashMap<>();
+      long presentCount = logs.stream().filter(log -> "Present".equals(log.getAttendStatus())).count();
+      long lateCount = logs.stream().filter(log -> "Late".equals(log.getAttendStatus())).count();
+      long absentCount = logs.stream().filter(log -> "Absent".equals(log.getAttendStatus())).count();
+
+      stats.put("TotalDays", (long) logs.size());
+      stats.put("PresentDays", presentCount);
+      stats.put("LateDays", lateCount);
+      stats.put("AbsentDays", absentCount);
+
+      return stats;
   }
 
 }

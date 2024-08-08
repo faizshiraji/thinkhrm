@@ -24,12 +24,15 @@ public class AttendanceLog {
 	@Column(name = "id_attendance_log")
 	private int idAttendanceLog;
 	@DateTimeFormat(iso = ISO.DATE_TIME)
+	@Column(nullable = true)
 	private Date inTime;
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private Date outTime;
 	private String attendStatus;
 	private String note;
+	@Column(nullable = true)
 	private Integer status;
+	@Column(nullable = true)
 	private Integer inId;
 	private Integer outId;
 	

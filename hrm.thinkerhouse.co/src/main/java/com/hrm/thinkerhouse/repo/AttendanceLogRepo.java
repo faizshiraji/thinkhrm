@@ -23,4 +23,7 @@ public interface AttendanceLogRepo extends JpaRepository<AttendanceLog, Integer>
 
     @Query("SELECT a FROM AttendanceLog a WHERE a.inTime BETWEEN :startDateTime AND :endDateTime")
     Page<AttendanceLog> findAllByInTimeBetween(Date startDateTime, Date endDateTime, Pageable pageable);
+    
+    @Query("SELECT a FROM AttendanceLog a WHERE a.employee.id = :userId AND MONTH(a.inTime) = :month AND YEAR(a.inTime) = :year")
+    List<AttendanceLog> findByEmployeeAndMonth(int userId, int month, int year);
 }

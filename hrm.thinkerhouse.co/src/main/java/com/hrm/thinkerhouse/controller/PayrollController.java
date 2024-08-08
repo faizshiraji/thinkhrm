@@ -3,6 +3,7 @@ package com.hrm.thinkerhouse.controller;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,8 @@ import com.hrm.thinkerhouse.entities.Employee;
 import com.hrm.thinkerhouse.entities.Payroll;
 import com.hrm.thinkerhouse.entities.SalaryComponents;
 import com.hrm.thinkerhouse.entities.SalaryStructure;
+import com.hrm.thinkerhouse.services.AttendanceLogService;
+import com.hrm.thinkerhouse.services.DateCountService;
 import com.hrm.thinkerhouse.services.EmployeeService;
 import com.hrm.thinkerhouse.services.PayrollService;
 import com.hrm.thinkerhouse.services.SalaryComponentsService;
@@ -35,6 +38,12 @@ public class PayrollController {
 	
 	@Autowired
 	private PayrollService payrollService;
+	
+	@Autowired
+	private DateCountService dateCountService;
+	
+	@Autowired
+	private AttendanceLogService attendanceLogService;
 	
 	@GetMapping("/payroll")
 	public String viewPayroll() {
@@ -93,6 +102,19 @@ public class PayrollController {
 								salaryStructure.getHouseRent() + 
 								salaryStructure.getMedical();
 			
+				int dayCountForMonth = dateCountService.getDayCountForMonth(2024, 8);
+				System.out.println(dayCountForMonth);
+				
+				int fridayCountForMonth = dateCountService.getFridayCountForMonth(2024, 8);
+				System.out.println(fridayCountForMonth);
+
+				Employee employee = salaryStructure.getEmployee();
+				
+				
+				Map<String,Long> attendanceStats = attendanceLogService.getAttendanceStats(employee.getIdEmployee(), 6, 2024);
+				
+				System.out.println(attendanceStats + " Ruhul total day");
+				
 				System.out.println(grossSalary + "is Gross Salary");
 			}
 		}
